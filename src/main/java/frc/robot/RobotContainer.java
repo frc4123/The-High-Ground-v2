@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoAimCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -29,7 +28,8 @@ import frc.robot.utils.Vision;
 public class RobotContainer {
 
   // TODO add rumble on vision alignment
-  final XboxController driverController = new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
+  private final XboxController driverController =
+      new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
@@ -41,20 +41,27 @@ public class RobotContainer {
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
   private final AutoAimCommand autoAimCommand =
       new AutoAimCommand(
           vision, driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
+
   private final StartEndCommand elevatorDownCommand =
       new StartEndCommand(
           () -> elevatorSubsystem.setElevatorSpeed(-.25),
           () -> elevatorSubsystem.setElevatorSpeed(0),
           elevatorSubsystem);
+
   private final StartEndCommand elevatorUpCommand =
       new StartEndCommand(
           () -> elevatorSubsystem.setElevatorSpeed(.25),
           () -> elevatorSubsystem.setElevatorSpeed(0),
           elevatorSubsystem);
+
+  private final StartEndCommand shootCommand =
+      new StartEndCommand(
+          () -> shooterSubsystem.setSpeed(.25),
+          () -> shooterSubsystem.setSpeed(0),
+          shooterSubsystem);
 
   private void calibrate() {
     System.out.println("Gyro is calibrating...");
@@ -63,6 +70,10 @@ public class RobotContainer {
 
   public DriveSubsystem getDriveSubsystem() {
     return driveSubsystem;
+  }
+
+  public XboxController getDriverController() {
+    return driverController;
   }
 
   private void shuffleboardSetup() {
@@ -90,15 +101,14 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // create buttons
-
     Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
     Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
     Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
 
     // interact with buttons
-
     lb.whileHeld(elevatorDownCommand);
     rb.whileHeld(elevatorUpCommand);
+    // check if this works
     a.whenPressed(autoAimCommand);
     a.whileHeld(shootCommand);
   }

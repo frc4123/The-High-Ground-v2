@@ -109,8 +109,8 @@ public final class Constants {
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;
 
-    public static final double MAX_VELOCITY = 0.25;
-    public static final double MAX_ACCELERATION = 0.2;
+    public static final double MAX_VELOCITY = 3;
+    public static final double MAX_ACCELERATION = 3;
 
     public static final double STARTING_POSE_X = 0;
     public static final double STARTING_POSE_Y = 0;

@@ -26,11 +26,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleSupplier;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPipelineResult;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -49,23 +45,20 @@ public class DriveSubsystem extends SubsystemBase {
   private final DifferentialDrive differentialDrive =
       new DifferentialDrive(leftMaster, rightMaster);
 
+  // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-characterization/introduction.html
   private final DifferentialDriveOdometry odometry =
       new DifferentialDriveOdometry(gyro.getRotation2d());
-  private DifferentialDriveVoltageConstraint autoVoltageConstraint =
+
+  private final DifferentialDriveVoltageConstraint autoVoltageConstraint =
       new DifferentialDriveVoltageConstraint(
           TrajectoryConstants.SIMPLE_MOTOR_FEED_FOWARD, TrajectoryConstants.DRIVE_KINEMATICS, 10);
+
   private final PIDController ramseteController = new PIDController(TrajectoryConstants.KP, 0, 0);
 
-  public static final PhotonCamera camera = new PhotonCamera(AutoAimConstants.CAMERA_NAME);
-  PhotonPipelineResult result;
+  public final List<Trajectory> pathList = List.of();
+  // https://stackoverflow.com/questions/46579074/what-is-the-difference-between-list-of-and-arrays-aslist
 
-  DoubleSupplier forward;
-  double rotationSpeed = 0;
-
-  // static?
-  public final List<Trajectory> pathList = new ArrayList<>();
-
-  TrajectoryConfig config =
+  private final TrajectoryConfig config =
       new TrajectoryConfig(TrajectoryConstants.MAX_VELOCITY, TrajectoryConstants.MAX_ACCELERATION)
           .setKinematics(TrajectoryConstants.DRIVE_KINEMATICS)
           .addConstraint(autoVoltageConstraint);
@@ -112,6 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
     leftSlave.follow(leftMaster);
 
     pathList.add(
+        0,
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(new Translation2d(1, 0)),
@@ -119,6 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
             config));
 
     pathList.add(
+        1,
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(new Translation2d(2, 0)),
@@ -145,9 +140,9 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.getAngle();
   }
 
-  public double getTurnRate() {
-    return gyro.getRate();
-  }
+  // public double getTurnRate() {
+  //   return gyro.getRate();
+  // }
 
   public double getHeading() {
     return gyro.getRotation2d().getDegrees();
@@ -171,9 +166,9 @@ public class DriveSubsystem extends SubsystemBase {
     odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
-  public double getAverageDistance() {
-    return ((getLeftWheelPosition() + getRightWheelPosition()) / 2);
-  }
+  // public double getAverageDistance() {
+  //   return ((getLeftWheelPosition() + getRightWheelPosition()) / 2);
+  // }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());

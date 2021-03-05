@@ -15,10 +15,13 @@ public class ShooterSubsystem extends SubsystemBase {
   private final TalonSRX shooterSlave = new TalonSRX(CanIdConstants.SHOOTER_SLAVE_ID);
 
   public ShooterSubsystem() {
+    // if motors are on the same side, set to follow, if not, comment out follow, and uncomment
+    // shooterSlave.set(ControlMode.PercentOutput, -speed);
     shooterSlave.follow(shooterMaster);
   }
 
   public void setSpeed(double speed) {
     shooterMaster.set(ControlMode.PercentOutput, speed);
+    // shooterSlave.set(ControlMode.PercentOutput, -speed);
   }
 }
