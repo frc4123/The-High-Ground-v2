@@ -7,9 +7,9 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -30,15 +30,15 @@ import java.util.List;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private final WPI_TalonFX leftMaster = new WPI_TalonFX(CanIdConstants.LEFT_MASTER_ID);
-  private final WPI_TalonFX rightMaster = new WPI_TalonFX(CanIdConstants.RIGHT_MASTER_ID);
-  private final WPI_TalonFX leftSlave = new WPI_TalonFX(CanIdConstants.LEFT_SLAVE_ID);
-  private final WPI_TalonFX rightSlave = new WPI_TalonFX(CanIdConstants.RIGHT_SLAVE_ID);
+  // private final WPI_TalonFX leftMaster = new WPI_TalonFX(CanIdConstants.LEFT_MASTER_ID);
+  // private final WPI_TalonFX rightMaster = new WPI_TalonFX(CanIdConstants.RIGHT_MASTER_ID);
+  // private final WPI_TalonFX leftSlave = new WPI_TalonFX(CanIdConstants.LEFT_SLAVE_ID);
+  // private final WPI_TalonFX rightSlave = new WPI_TalonFX(CanIdConstants.RIGHT_SLAVE_ID);
 
-  // private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(CanIdConstants.LEFT_MASTER_ID);
-  // private final WPI_TalonSRX rightMaster = new WPI_TalonSRX(CanIdConstants.RIGHT_MASTER_ID);
-  // private final WPI_VictorSPX leftSlave = new WPI_VictorSPX(CanIdConstants.LEFT_SLAVE_ID);
-  // private final WPI_VictorSPX rightSlave = new WPI_VictorSPX(CanIdConstants.RIGHT_SLAVE_ID);
+  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(CanIdConstants.LEFT_MASTER_ID);
+  private final WPI_TalonSRX rightMaster = new WPI_TalonSRX(CanIdConstants.RIGHT_MASTER_ID);
+  private final WPI_VictorSPX leftSlave = new WPI_VictorSPX(CanIdConstants.LEFT_SLAVE_ID);
+  private final WPI_VictorSPX rightSlave = new WPI_VictorSPX(CanIdConstants.RIGHT_SLAVE_ID);
 
   private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
@@ -55,45 +55,44 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final PIDController ramseteController = new PIDController(TrajectoryConstants.KP, 0, 0);
 
-  public final List<Trajectory> pathList = List.of();
-  // https://stackoverflow.com/questions/46579074/what-is-the-difference-between-list-of-and-arrays-aslist
-
   private final TrajectoryConfig config =
       new TrajectoryConfig(TrajectoryConstants.MAX_VELOCITY, TrajectoryConstants.MAX_ACCELERATION)
           .setKinematics(TrajectoryConstants.DRIVE_KINEMATICS)
           .addConstraint(autoVoltageConstraint);
 
+  public final List<Trajectory> pathList;
+
   // talonfx
-  private final SupplyCurrentLimitConfiguration currentLimit =
-      new SupplyCurrentLimitConfiguration(true, 40, 60, 1);
+  // private final SupplyCurrentLimitConfiguration currentLimit =
+  //     new SupplyCurrentLimitConfiguration(true, 40, 60, 1);
 
   public DriveSubsystem() {
     // talonfx
-    leftMaster.configSupplyCurrentLimit(currentLimit);
-    rightMaster.configSupplyCurrentLimit(currentLimit);
-    leftSlave.configSupplyCurrentLimit(currentLimit);
-    rightSlave.configSupplyCurrentLimit(currentLimit);
-
-    leftMaster.configSelectedFeedbackSensor(
-        TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
-    rightMaster.configSelectedFeedbackSensor(
-        TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
-
-    // talonsrx + victorspx
-    // leftMaster.configContinuousCurrentLimit(10, 0);
-    // leftMaster.configPeakCurrentLimit(15, 0);
-    // leftMaster.configPeakCurrentDuration(100, 0);
-    // leftMaster.enableCurrentLimit(true);
-
-    // rightMaster.configContinuousCurrentLimit(40, 0);
-    // rightMaster.configPeakCurrentLimit(60, 0);
-    // rightMaster.configPeakCurrentDuration(500, 0);
-    // rightMaster.enableCurrentLimit(true);
+    // leftMaster.configSupplyCurrentLimit(currentLimit);
+    // rightMaster.configSupplyCurrentLimit(currentLimit);
+    // leftSlave.configSupplyCurrentLimit(currentLimit);
+    // rightSlave.configSupplyCurrentLimit(currentLimit);
 
     // leftMaster.configSelectedFeedbackSensor(
-    //     TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
+    //     TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
     // rightMaster.configSelectedFeedbackSensor(
-    //     TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
+    //     TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
+
+    // talonsrx + victorspx
+    leftMaster.configContinuousCurrentLimit(10, 0);
+    leftMaster.configPeakCurrentLimit(15, 0);
+    leftMaster.configPeakCurrentDuration(100, 0);
+    leftMaster.enableCurrentLimit(true);
+
+    rightMaster.configContinuousCurrentLimit(40, 0);
+    rightMaster.configPeakCurrentLimit(60, 0);
+    rightMaster.configPeakCurrentDuration(500, 0);
+    rightMaster.enableCurrentLimit(true);
+
+    leftMaster.configSelectedFeedbackSensor(
+        TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
+    rightMaster.configSelectedFeedbackSensor(
+        TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
 
     // both
     leftMaster.setNeutralMode(NeutralMode.Brake);
@@ -104,21 +103,18 @@ public class DriveSubsystem extends SubsystemBase {
     rightSlave.follow(rightMaster);
     leftSlave.follow(leftMaster);
 
-    pathList.add(
-        0,
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(1, 0)),
-            new Pose2d(3, 0, new Rotation2d(0)),
-            config));
-
-    pathList.add(
-        1,
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(2, 0)),
-            new Pose2d(4, 0, new Rotation2d(0)),
-            config));
+    pathList =
+        List.of(
+            TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(new Translation2d(1, 0)),
+                new Pose2d(3, 0, new Rotation2d(0)),
+                config),
+            TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(new Translation2d(2, 0)),
+                new Pose2d(4, 0, new Rotation2d(0)),
+                config));
 
     resetEncoders();
     // TODO check if resetGyro is needed in constructor

@@ -43,12 +43,12 @@ public class AutoAimCommand extends CommandBase {
     driveSubsystem.arcadeDrive(forward.getAsDouble(), rotationSpeed);
   }
 
-  @Override
-  public boolean isFinished() {
-    if (Math.abs(result.getBestTarget().getYaw()) <= 0.5) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // @Override
+  // public boolean isFinished() {
+  //   if (Math.abs(result.getBestTarget().getYaw()) <= 0.5) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }

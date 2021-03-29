@@ -86,7 +86,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     calibrate();
-    shuffleboardSetup();
+    // shuffleboardSetup();
     configureButtonBindings();
 
     driveSubsystem.setDefaultCommand(
