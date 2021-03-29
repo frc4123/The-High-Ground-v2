@@ -109,8 +109,8 @@ public class RobotContainer {
     lb.whileHeld(elevatorDownCommand);
     rb.whileHeld(elevatorUpCommand);
     // check if this works
-    a.whenPressed(autoAimCommand);
-    a.whileHeld(shootCommand);
+    a.whileHeld(autoAimCommand);
+    // a.whileHeld(shootCommand);
   }
 
   /**
