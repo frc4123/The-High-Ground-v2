@@ -10,7 +10,6 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.utils.Vision;
 import java.util.function.DoubleSupplier;
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPipelineResult;
 
 public class AutoAimCommand extends CommandBase {
 
@@ -20,7 +19,7 @@ public class AutoAimCommand extends CommandBase {
   DoubleSupplier forward;
 
   double rotationSpeed = 0;
-  PhotonPipelineResult result;
+  // PhotonPipelineResult result;
 
   public AutoAimCommand(Vision vision, DriveSubsystem driveSubsystem, DoubleSupplier forward) {
     this.camera = vision.camera;
@@ -33,12 +32,13 @@ public class AutoAimCommand extends CommandBase {
 
   @Override
   public void execute() {
-    result = camera.getLatestResult();
+    var result = camera.getLatestResult();
 
     if (result.hasTargets()) {
-      rotationSpeed = controller.calculate(result.getBestTarget().getYaw(), 0);
+      rotationSpeed = -controller.calculate(result.getBestTarget().getYaw(), 0);
     } else {
       rotationSpeed = 0;
+      System.out.print("You shouldn't see this!");
     }
     driveSubsystem.arcadeDrive(forward.getAsDouble(), rotationSpeed);
   }
