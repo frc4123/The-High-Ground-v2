@@ -6,24 +6,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AutoAimConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.utils.Vision;
 import java.util.function.DoubleSupplier;
 import org.photonvision.PhotonCamera;
 
 public class AutoAimCommand extends CommandBase {
 
-  PhotonCamera camera;
-  PIDController controller;
   DriveSubsystem driveSubsystem;
   DoubleSupplier forward;
 
   double rotationSpeed = 0;
-  // PhotonPipelineResult result;
 
-  public AutoAimCommand(Vision vision, DriveSubsystem driveSubsystem, DoubleSupplier forward) {
-    this.camera = vision.camera;
-    this.controller = vision.controller;
+  // !characterize the robot for these values
+  PhotonCamera camera = new PhotonCamera(AutoAimConstants.CAMERA_NAME);
+  PIDController controller =
+      new PIDController(AutoAimConstants.KP, AutoAimConstants.KI, AutoAimConstants.KD);
+
+  public AutoAimCommand(DriveSubsystem driveSubsystem, DoubleSupplier forward) {
     this.driveSubsystem = driveSubsystem;
     this.forward = forward;
 
@@ -33,12 +33,11 @@ public class AutoAimCommand extends CommandBase {
   @Override
   public void execute() {
     var result = camera.getLatestResult();
-
     if (result.hasTargets()) {
+      System.out.println("Has Targets");
       rotationSpeed = -controller.calculate(result.getBestTarget().getYaw(), 0);
     } else {
       rotationSpeed = 0;
-      System.out.print("You shouldn't see this!");
     }
     driveSubsystem.arcadeDrive(forward.getAsDouble(), rotationSpeed);
   }

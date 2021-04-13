@@ -23,7 +23,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utils.FourMeterAuto;
 import frc.robot.utils.ThreeMeterAuto;
-import frc.robot.utils.Vision;
 
 public class RobotContainer {
 
@@ -35,15 +34,13 @@ public class RobotContainer {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-  private final Vision vision = new Vision();
   private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
   private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private final AutoAimCommand autoAimCommand =
-      new AutoAimCommand(
-          vision, driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
+      new AutoAimCommand(driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
 
   private final StartEndCommand elevatorDownCommand =
       new StartEndCommand(
@@ -86,7 +83,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     calibrate();
-    // shuffleboardSetup();
+    shuffleboardSetup();
     configureButtonBindings();
 
     driveSubsystem.setDefaultCommand(

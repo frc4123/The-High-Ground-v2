@@ -132,8 +132,12 @@ public class DriveSubsystem extends SubsystemBase {
     differentialDrive.feed();
   }
 
-  public void gyroAngle() {
-    gyro.getAngle();
+  public DifferentialDrive getDifferentialDrive() {
+    return differentialDrive;
+  }
+
+  public double getGyroAngle() {
+    return gyro.getAngle();
   }
 
   // public double getTurnRate() {

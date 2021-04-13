@@ -125,8 +125,8 @@ public final class Constants {
   }
 
   public static final class AutoAimConstants {
-
-    public static final String CAMERA_NAME = "photonvision";
+    // !MAKE SURE THIS IS RIGHT
+    public static final String CAMERA_NAME = "Microsoft_LifeCam_HD-3000";
     public static final double KI = 0;
     public static final double KD = 0;
     public static final double KP = .1;
