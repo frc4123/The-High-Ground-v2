@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -26,98 +27,98 @@ import frc.robot.utils.ThreeMeterAuto;
 
 public class RobotContainer {
 
-  // TODO add rumble on vision alignment
-  private final XboxController driverController =
-      new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
+    // TODO add rumble on vision alignment
+    private final XboxController driverController =
+            new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
 
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+    private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-  private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
-  private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
+    private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
+    private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
 
-  private final SendableChooser<Command> chooser = new SendableChooser<>();
+    private final SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final AutoAimCommand autoAimCommand =
-      new AutoAimCommand(driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
+    private final AutoAimCommand autoAimCommand =
+            new AutoAimCommand(driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
 
-  private final StartEndCommand elevatorDownCommand =
-      new StartEndCommand(
-          () -> elevatorSubsystem.setElevatorSpeed(-.25),
-          () -> elevatorSubsystem.setElevatorSpeed(0),
-          elevatorSubsystem);
+    private final StartEndCommand elevatorDownCommand =
+            new StartEndCommand(
+                    () -> elevatorSubsystem.setElevatorSpeed(-.25),
+                    () -> elevatorSubsystem.setElevatorSpeed(0),
+                    elevatorSubsystem);
 
-  private final StartEndCommand elevatorUpCommand =
-      new StartEndCommand(
-          () -> elevatorSubsystem.setElevatorSpeed(.25),
-          () -> elevatorSubsystem.setElevatorSpeed(0),
-          elevatorSubsystem);
+    private final StartEndCommand elevatorUpCommand =
+            new StartEndCommand(
+                    () -> elevatorSubsystem.setElevatorSpeed(.25),
+                    () -> elevatorSubsystem.setElevatorSpeed(0),
+                    elevatorSubsystem);
 
-  private final StartEndCommand shootCommand =
-      new StartEndCommand(
-          () -> shooterSubsystem.setSpeed(.25),
-          () -> shooterSubsystem.setSpeed(0),
-          shooterSubsystem);
+    private final StartEndCommand shootCommand =
+            new StartEndCommand(
+                    () -> shooterSubsystem.setSpeed(.25),
+                    () -> shooterSubsystem.setSpeed(0),
+                    shooterSubsystem);
 
-  private void calibrate() {
-    System.out.println("Gyro is calibrating...");
-    driveSubsystem.calibrateGyro();
-  }
+    private void calibrate() {
+        System.out.println("Gyro is calibrating...");
+        driveSubsystem.calibrateGyro();
+    }
 
-  public DriveSubsystem getDriveSubsystem() {
-    return driveSubsystem;
-  }
+    public DriveSubsystem getDriveSubsystem() {
+        return driveSubsystem;
+    }
 
-  public XboxController getDriverController() {
-    return driverController;
-  }
+    public XboxController getDriverController() {
+        return driverController;
+    }
 
-  private void shuffleboardSetup() {
-    final ShuffleboardTab tab = Shuffleboard.getTab("Auto");
+    private void shuffleboardSetup() {
+        final ShuffleboardTab tab = Shuffleboard.getTab("Auto");
 
-    tab.add("Select program for auto", chooser);
-    chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
-    chooser.addOption("4 meter", fourMeterAuto.getCommand());
-  }
+        tab.add("Select program for auto", chooser);
+        chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
+        chooser.addOption("4 meter", fourMeterAuto.getCommand());
+    }
 
-  public RobotContainer() {
-    calibrate();
-    shuffleboardSetup();
-    configureButtonBindings();
+    public RobotContainer() {
+        calibrate();
+        shuffleboardSetup();
+        configureButtonBindings();
 
-    driveSubsystem.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              driveSubsystem.arcadeDrive(
-                  -driverController.getY(GenericHID.Hand.kLeft),
-                  driverController.getX(GenericHID.Hand.kRight));
-            },
-            driveSubsystem));
-  }
+        driveSubsystem.setDefaultCommand(
+                new RunCommand(
+                        () -> {
+                            driveSubsystem.arcadeDrive(
+                                    -driverController.getY(GenericHID.Hand.kLeft),
+                                    driverController.getX(GenericHID.Hand.kRight));
+                        },
+                        driveSubsystem));
+    }
 
-  private void configureButtonBindings() {
-    // create buttons
-    Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
-    Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
-    Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
+    private void configureButtonBindings() {
+        // create buttons
+        Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
+        Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
+        Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
 
-    // interact with buttons
-    lb.whileHeld(elevatorDownCommand);
-    rb.whileHeld(elevatorUpCommand);
-    // check if this works
-    a.whileHeld(autoAimCommand);
-    // a.whileHeld(shootCommand);
-  }
+        // interact with buttons
+        lb.whileHeld(elevatorDownCommand);
+        rb.whileHeld(elevatorUpCommand);
+        // check if this works
+        a.whenPressed(autoAimCommand);
+        // a.whileHeld(shootCommand);
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // drive back with 3 meter or 4 meter, aim, shoot
-    return new SequentialCommandGroup(
-        chooser.getSelected(), autoAimCommand.withTimeout(2), shootCommand.withTimeout(5));
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // drive back with 3 meter or 4 meter, aim, shoot
+        return new SequentialCommandGroup(
+                chooser.getSelected(), autoAimCommand.withTimeout(2), shootCommand.withTimeout(5));
+    }
 }
