@@ -8,10 +8,8 @@ import static frc.robot.Constants.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -22,8 +20,7 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.utils.FourMeterAuto;
-import frc.robot.utils.ThreeMeterAuto;
+import frc.robot.utils.ShuffleBoardHelper;
 
 public class RobotContainer {
 
@@ -35,10 +32,11 @@ public class RobotContainer {
     private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-    private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
-    private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
+    // private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
+    // private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
 
-    private final SendableChooser<Command> chooser = new SendableChooser<>();
+    // private final SendableChooser<Command> chooser = new SendableChooser<>();
+    ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
             new AutoAimCommand(driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
@@ -74,17 +72,18 @@ public class RobotContainer {
         return driverController;
     }
 
-    private void shuffleboardSetup() {
-        final ShuffleboardTab tab = Shuffleboard.getTab("Auto");
+    // private void shuffleboardSetup() {
+    //     final ShuffleboardTab tab = Shuffleboard.getTab("Driver Board");
 
-        tab.add("Select program for auto", chooser);
-        chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
-        chooser.addOption("4 meter", fourMeterAuto.getCommand());
-    }
+    //     tab.add("Select program for auto", chooser);
+    //     chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
+    //     chooser.addOption("4 meter", fourMeterAuto.getCommand());
+    // }
 
     public RobotContainer() {
+        shuffleBoardHelper = new ShuffleBoardHelper(driveSubsystem);
         calibrate();
-        shuffleboardSetup();
+        // shuffleboardSetup();
         configureButtonBindings();
 
         driveSubsystem.setDefaultCommand(
@@ -108,6 +107,7 @@ public class RobotContainer {
         rb.whileHeld(elevatorUpCommand);
         // check if this works
         a.whenPressed(autoAimCommand);
+        a.whenReleased(new InstantCommand(autoAimCommand::cancel));
         // a.whileHeld(shootCommand);
     }
 
@@ -119,6 +119,9 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // drive back with 3 meter or 4 meter, aim, shoot
         return new SequentialCommandGroup(
-                chooser.getSelected(), autoAimCommand.withTimeout(2), shootCommand.withTimeout(5));
+                // lambda?
+                shuffleBoardHelper.getSelecteCommand(),
+                autoAimCommand.withTimeout(2),
+                shootCommand.withTimeout(5));
     }
 }
