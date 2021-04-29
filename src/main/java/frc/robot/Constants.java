@@ -135,5 +135,7 @@ public final class Constants {
         // public static final double KA = 0;
         // public static final double KV = 0;
         // public static final double KS = 0;
+        // may be undded with the setTolerance method
+        public static final double TOLERANCE = 0.07;
     }
 }

@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class ShuffleBoardHelper {
+    // TODO make a layout grid
+    // TODO add http camera, must find link to direct mpeg stream first
     private final ThreeMeterAuto threeMeterAuto;
     private final FourMeterAuto fourMeterAuto;
     private final ShuffleboardTab tab;
-    SimpleWidget isCameraCentred;
+    SimpleWidget isCameraCentredWidget;
     private final SendableChooser<Command> chooser = new SendableChooser<>();
 
     public ShuffleBoardHelper(DriveSubsystem driveSubsystem) {
@@ -25,14 +27,15 @@ public class ShuffleBoardHelper {
         chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
 
-        isCameraCentred = tab.add("Is target centered?", false).withWidget(BuiltInWidgets.kBooleanBox);
+        isCameraCentredWidget =
+                tab.add("Is target centered?", false).withWidget(BuiltInWidgets.kBooleanBox);
     }
 
-    public Command getSelecteCommand() {
+    public Command getSelectedCommand() {
         return chooser.getSelected();
     }
 
-    public SimpleWidget getIsCameraCentred(){
-        return isCameraCentred;
+    public SimpleWidget getIsCameraCentredWidget() {
+        return isCameraCentredWidget;
     }
 }

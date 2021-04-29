@@ -35,12 +35,13 @@ public class RobotContainer {
     // private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
 
     // private final SendableChooser<Command> chooser = new SendableChooser<>();
-    public static boolean isCameraCentred = false;
-    
+    //     public static boolean isCameraCentred = false;
+
     ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
-            new AutoAimCommand(driveSubsystem, () -> -driverController.getY(GenericHID.Hand.kLeft));
+            new AutoAimCommand(
+                    driveSubsystem, this, () -> -driverController.getY(GenericHID.Hand.kLeft));
 
     private final StartEndCommand elevatorDownCommand =
             new StartEndCommand(
@@ -94,9 +95,9 @@ public class RobotContainer {
         Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
         Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
         Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
-        Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
-        Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
-        Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
+        // Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
+        // Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
+        // Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
 
         // interact with buttons
         lb.whileHeld(elevatorDownCommand);
@@ -114,12 +115,16 @@ public class RobotContainer {
         // drive back with 3 meter or 4 meter, aim, shoot
         return new SequentialCommandGroup(
                 // lambda?
-                shuffleBoardHelper.getSelecteCommand(),
+                shuffleBoardHelper.getSelectedCommand(),
                 autoAimCommand.withTimeout(2),
                 shootCommand.withTimeout(5));
     }
 
-    public ShuffleBoardHelper getShuffleBoardHelper(){
-            return shuffleBoardHelper;
+    public ShuffleBoardHelper getShuffleBoardHelper() {
+        return shuffleBoardHelper;
+    }
+
+    public XboxController getDriverController() {
+        return driverController;
     }
 }

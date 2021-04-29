@@ -7,19 +7,21 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.CanIdConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  private final VictorSPX elevatorMotor = new VictorSPX(CanIdConstants.ELEVATOR_MOTOR_ID);
+    private final VictorSPX elevatorMotor = new VictorSPX(CanIdConstants.ELEVATOR_MOTOR_ID);
 
-  public ElevatorSubsystem() {
-    elevatorMotor.configOpenloopRamp(1);
-    elevatorMotor.setNeutralMode(NeutralMode.Brake);
-  }
+    public ElevatorSubsystem() {
+        elevatorMotor.configOpenloopRamp(1);
+        elevatorMotor.setNeutralMode(NeutralMode.Brake);
+    }
 
-  public void setElevatorSpeed(double speed) {
-    elevatorMotor.set(ControlMode.PercentOutput, speed);
-  }
+    public void setElevatorSpeed(double speed) {
+        elevatorMotor.set(ControlMode.PercentOutput, speed);
+    }
 }
