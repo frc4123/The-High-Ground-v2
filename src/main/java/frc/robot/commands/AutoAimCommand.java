@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoAimConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -53,6 +53,7 @@ public class AutoAimCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if (Math.abs(result.getBestTarget().getYaw()) <= 0.07) {
+            RobotContainer.isCameraCentred = true;
             return true;
         } else {
             return false;

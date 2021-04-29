@@ -9,7 +9,6 @@ import static frc.robot.Constants.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -36,6 +35,8 @@ public class RobotContainer {
     // private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
 
     // private final SendableChooser<Command> chooser = new SendableChooser<>();
+    public static boolean isCameraCentred = false;
+    
     ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
@@ -62,14 +63,6 @@ public class RobotContainer {
     private void calibrate() {
         System.out.println("Gyro is calibrating...");
         driveSubsystem.calibrateGyro();
-    }
-
-    public DriveSubsystem getDriveSubsystem() {
-        return driveSubsystem;
-    }
-
-    public XboxController getDriverController() {
-        return driverController;
     }
 
     // private void shuffleboardSetup() {
@@ -101,13 +94,14 @@ public class RobotContainer {
         Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
         Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
         Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
+        Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
+        Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
+        Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
 
         // interact with buttons
         lb.whileHeld(elevatorDownCommand);
         rb.whileHeld(elevatorUpCommand);
-        // check if this works
-        a.whenPressed(autoAimCommand);
-        a.whenReleased(new InstantCommand(autoAimCommand::cancel));
+        a.whenHeld(autoAimCommand);
         // a.whileHeld(shootCommand);
     }
 
@@ -123,5 +117,9 @@ public class RobotContainer {
                 shuffleBoardHelper.getSelecteCommand(),
                 autoAimCommand.withTimeout(2),
                 shootCommand.withTimeout(5));
+    }
+
+    public ShuffleBoardHelper getShuffleBoardHelper(){
+            return shuffleBoardHelper;
     }
 }
