@@ -138,6 +138,7 @@ public final class Constants {
     /** Values relating to the auto-aim feature of the robot. See {@see AutoAimCommand}. */
     public static final class AutoAimConstants {
         // !MAKE SURE THIS IS RIGHT
+        // see if we can just pull this from Network tables
         public static final String CAMERA_NAME = "Microsoft_LifeCam_HD-3000";
         // !CHARACTERIZE THE ROBOT FOR THESE VALUES
         public static final double KP = 0.01;

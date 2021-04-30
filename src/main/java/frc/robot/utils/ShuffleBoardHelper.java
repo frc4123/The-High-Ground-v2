@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.cscore.HttpCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -47,10 +48,18 @@ public class ShuffleBoardHelper {
                         .withWidget(BuiltInWidgets.kBooleanBox)
                         .withPosition(0, 1)
                         .withSize(2, 2);
+        // this (should) get the processed footage from photon vision
+        // cameraStreamWidget =
+        //         driverTab
+        //                 .add(cameraStream)
+        //                 .withWidget(BuiltInWidgets.kCameraStream)
+        //                 .withPosition(2, 0)
+        //                 .withSize(5, 4)
+        //                 .withProperties(Map.of("Show controls", false));
+        // this gets the unprocessed camera footage.
         cameraStreamWidget =
                 driverTab
-                        .add(cameraStream)
-                        .withWidget(BuiltInWidgets.kCameraStream)
+                        .add(CameraServer.getInstance().startAutomaticCapture())
                         .withPosition(2, 0)
                         .withSize(5, 4)
                         .withProperties(Map.of("Show controls", false));
