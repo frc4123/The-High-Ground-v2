@@ -11,13 +11,15 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
-
+    /** USB ports on the computer */
     public static final class UsbConstants {
 
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int AUXDRIVER_CONTROLLER_PORT = 1;
+        public static final int MISC_PORT_1 = 2;
+        public static final int MISC_PORT_2 = 3;
     }
-
+    /** Xbox buttons to their coresponding integer value. */
     public static final class XboxConstants {
 
         // Button mappings
@@ -51,7 +53,10 @@ public final class Constants {
         public static int POV_DOWNN = 180;
         public static int POV_LEFT = 270;
     }
-
+    /**
+     * PS4 buttons and their coresponding integer value. Note: you must use DS4Windows in order to
+     * use a PS4 controller on a computer
+     */
     public static final class PS4Constants {
 
         public static int X_BUTTON = 1;
@@ -60,7 +65,8 @@ public final class Constants {
         public static int TRIANGLE_BUTTON = 4;
     }
 
-    public static final class LogitecConstants {
+    /** Logitec buttons to their coresponding integer value */
+    public static final class LogitechConstants {
 
         public static final int ONE_BUTTON = 1;
         public static final int TWO_BUTTON = 2;
@@ -70,12 +76,14 @@ public final class Constants {
         public static final int RB_BUTTON = 6;
     }
 
+    /** Values relating to the robot's drive train */
     public static final class DriveConstants {
 
         // middle to middle of the wheel
         public static final double TRACK_WIDTH_METERS = 0.638;
         public static final int MAG_ENCODER_CPR = 4096;
         public static final int TALONFX_ENCODER_CPR = 2048;
+        // !remove if not using an integrated encoder
         public static final double GEAR_RATIO =
                 11.25; // 12:50 => 20:54 on a falconfx gives 14.8 fps. Driven/Driver
         public static final double WHEEL_DIAMETER_METERS = 0.15875;
@@ -83,6 +91,7 @@ public final class Constants {
         public static final int TIMEOUT = 50;
     }
 
+    /** Mappings between physical CAN devices and their corresponding ID in the CAN chain */
     public static final class CanIdConstants {
 
         public static final int LEFT_MASTER_ID = 1;
@@ -99,6 +108,7 @@ public final class Constants {
         public static final int INDEX_MOTOR_ID = 12;
     }
 
+    /** Values relating to path finding and trajectory following. See {@see FourMeterAuto} */
     public static final class TrajectoryConstants {
 
         public static final double KS = 1.2;
@@ -124,18 +134,19 @@ public final class Constants {
                         TrajectoryConstants.KS, TrajectoryConstants.KV, TrajectoryConstants.KA);
     }
 
+    /** Values relating to the auto-aim feature of the robot. See {@see AutoAimCommand}. */
     public static final class AutoAimConstants {
         // !MAKE SURE THIS IS RIGHT
         public static final String CAMERA_NAME = "Microsoft_LifeCam_HD-3000";
         // !CHARACTERIZE THE ROBOT FOR THESE VALUES
         public static final double KP = 0.01;
         public static final double KI = 0.0;
-        public static final double KD = 0.013;
+        public static final double KD = 0.01;
         public static final double FFW = 0.25;
         // public static final double KA = 0;
         // public static final double KV = 0;
         // public static final double KS = 0;
         // may be undded with the setTolerance method
-        public static final double TOLERANCE = 0.07;
+        public static final double TOLERANCE = 0.09;
     }
 }

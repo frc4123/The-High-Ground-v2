@@ -21,7 +21,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void setElevatorSpeed(double speed) {
+    /**
+     * Sets the elevator velocity. Value is calmped between -1.0 and 1.0.
+     *
+     * @param speed the velocity to set the motor to.
+     */
+    public void setElevatorVelocity(double speed) {
+        if (speed > 1.0) {
+            speed = 1.0;
+        } else if (speed < -1.0) {
+            speed = -1.0;
+        }
         elevatorMotor.set(ControlMode.PercentOutput, speed);
     }
 }

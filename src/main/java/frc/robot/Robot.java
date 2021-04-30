@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.Constants.AutoAimConstants;
-import frc.robot.utils.Vision;
-
 public class Robot extends TimedRobot {
 
     private Command autonomousCommand;
@@ -53,20 +50,25 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        // set boolean box to ture and false at any period during teleop
-        if (Vision.result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getIsCameraCentredWidget()
-                    .getEntry()
-                    .setBoolean(true);
-        } else if (Vision.result.getBestTarget().getYaw() >= AutoAimConstants.TOLERANCE) {
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getIsCameraCentredWidget()
-                    .getEntry()
-                    .setBoolean(false);
-        }
+        // TODO fix this
+        // set boolean box to true and false at any period during teleop
+        // try {
+        //     if (Vision.result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
+        //         robotContainer
+        //                 .getShuffleBoardHelper()
+        //                 .getIsCameraCentredWidget()
+        //                 .getEntry()
+        //                 .setBoolean(true);
+        //     } else if (Vision.result.getBestTarget().getYaw() >= AutoAimConstants.TOLERANCE) {
+        //         robotContainer
+        //                 .getShuffleBoardHelper()
+        //                 .getIsCameraCentredWidget()
+        //                 .getEntry()
+        //                 .setBoolean(false);
+        //     }
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     @Override

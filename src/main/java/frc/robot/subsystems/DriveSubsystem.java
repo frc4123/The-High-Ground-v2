@@ -65,6 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
                     .setKinematics(TrajectoryConstants.DRIVE_KINEMATICS)
                     .addConstraint(autoVoltageConstraint);
 
+    /** List of {@code Trajectorys} */
     public final List<Trajectory> pathList;
 
     // talonfx
@@ -125,45 +126,80 @@ public class DriveSubsystem extends SubsystemBase {
         // configopenloopramp() ?
     }
 
+    /**
+     * Arcade style drive. Values are squared to decrease sensitivity at low values. Please use the
+     * left stick for translation and the right stick for rotation.
+     *
+     * @param fwd the translation component
+     * @param rot the rotation component
+     */
     public void arcadeDrive(double fwd, double rot) {
         differentialDrive.arcadeDrive(fwd, rot);
     }
 
+    /**
+     * Tank drive. Typically used for trajectory following.
+     *
+     * @param leftVolts the voltage to supply to the left side of the drive train
+     * @param rightVolts the voltage to supply to the right side of the drive train
+     */
     public void voltDrive(double leftVolts, double rightVolts) {
+        // TODO make sure this is volage compensated
         leftMaster.setVoltage(leftVolts);
         rightMaster.setVoltage(-rightVolts);
         differentialDrive.feed();
     }
-
+    /**
+     * Returns the {@code DifferentialDrive} object.
+     *
+     * @return the DifferentialDrive instance
+     */
     public DifferentialDrive getDifferentialDrive() {
         return differentialDrive;
     }
 
-    public double getGyroAngle() {
-        return gyro.getAngle();
-    }
-
-    // public double getTurnRate() {
-    //   return gyro.getRate();
+    // public double getGyroAngle() {
+    //     return gyro.getAngle();
     // }
+    // Sometimes a gyro overrides getRotation and returns gyro as clockwise negative (which is
+    // proper)
+    // but their getAngle() returns clockwise positive. This means that
+    // gyro.getRotation2d().getDegrees will return clockwise negative, but getAngle() would return
+    // clockwise positive
+    // but I'm not sure of a gyro that does this
 
+    /**
+     * Returns rotaion in degrees. Returns the rotation of the gyro in degrees, with CCW rotation
+     * being positive.
+     *
+     * @return the heading of the gyro
+     */
     public double getHeading() {
+        // make sure this
         return gyro.getRotation2d().getDegrees();
     }
 
+    /** Calibrates the gyro. */
     public void calibrateGyro() {
         gyro.calibrate();
     }
 
+    /** Resets the gyro to a heading of 0. */
     public void resetGyro() {
         gyro.reset();
     }
 
+    /** Sets drive train encoders to 0 meters. */
     public void resetEncoders() {
         leftMaster.setSelectedSensorPosition(0, 0, DriveConstants.TIMEOUT);
         rightMaster.setSelectedSensorPosition(0, 0, DriveConstants.TIMEOUT);
     }
 
+    /**
+     * Resets the specified pose. Resets the drive train encoders and the {@link Pose2d} object.
+     *
+     * @param pose the Pose2d instance to reset
+     */
     public void resetPose(Pose2d pose) {
         resetEncoders();
         odometry.resetPosition(pose, gyro.getRotation2d());
@@ -173,17 +209,35 @@ public class DriveSubsystem extends SubsystemBase {
     //   return ((getLeftWheelPosition() + getRightWheelPosition()) / 2);
     // }
 
+    /**
+     * Returns a {@code DifferentialDriveWheelSpeeds} object.
+     *
+     * @return a {@link DifferentialDriveWheelSpeeds} object
+     */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(getLeftWheelSpeed(), getRightWheelSpeed());
     }
 
+    /**
+     * Returns the position, in meters, of the left side of the wheelbase. Position accumulates
+     * stating from when the robot is turned on.
+     *
+     * @return the current position, in meters, of the left side of the wheelbase
+     */
     private double getLeftWheelPosition() {
+        // TODO remove gear ratio when using talonsrxs
         return ((leftMaster.getSelectedSensorPosition()
                         * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
                         / DriveConstants.TALONFX_ENCODER_CPR)
                 / DriveConstants.GEAR_RATIO);
     }
 
+    /**
+     * Returns the position, in meters, of the right side of the wheelbase. Position accumulates
+     * stating from when the robot is turned on.
+     *
+     * @return the current position, in meters, of the right side of the wheelbase
+     */
     private double getRightWheelPosition() {
         return ((leftMaster.getSelectedSensorPosition()
                         * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
@@ -191,6 +245,11 @@ public class DriveSubsystem extends SubsystemBase {
                 / DriveConstants.GEAR_RATIO);
     }
 
+    /**
+     * Returns the current velocity, in meters per second, of the left side of the wheelbase.
+     *
+     * @return the current velocity, in meters per second, of the left side of the wheelbase
+     */
     private double getLeftWheelSpeed() {
         return (leftMaster.getSelectedSensorVelocity(0)
                 * 10
@@ -199,6 +258,11 @@ public class DriveSubsystem extends SubsystemBase {
                 * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
     }
 
+    /**
+     * Returns the current velocity, in meters per second, of the right side of the wheelbase.
+     *
+     * @return the current velocity, in meters per second, of the right side of the wheelbase
+     */
     private double getRightWheelSpeed() {
         return (leftMaster.getSelectedSensorVelocity(0)
                 * 10
@@ -207,10 +271,20 @@ public class DriveSubsystem extends SubsystemBase {
                 * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
     }
 
+    /**
+     * Returns the {@code Pose2d} instance.
+     *
+     * @return the {@link Pose2d} instance
+     */
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
-
+    /**
+     * Returns the {@code RamseteCommand}. Used to follow the speifided {@link Trajectory}.
+     *
+     * @param path the {@code Trajectory} to follow
+     * @return a {@link RamseteCommand} object
+     */
     public RamseteCommand ramsete(Trajectory path) {
         return new RamseteCommand(
                 path,

@@ -23,7 +23,6 @@ import frc.robot.utils.ShuffleBoardHelper;
 
 public class RobotContainer {
 
-    // TODO add rumble on vision alignment
     private final XboxController driverController =
             new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
 
@@ -31,13 +30,7 @@ public class RobotContainer {
     private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-    // private final ThreeMeterAuto threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
-    // private final FourMeterAuto fourMeterAuto = new FourMeterAuto(driveSubsystem);
-
-    // private final SendableChooser<Command> chooser = new SendableChooser<>();
-    //     public static boolean isCameraCentred = false;
-
-    ShuffleBoardHelper shuffleBoardHelper;
+    private final ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
             new AutoAimCommand(
@@ -45,19 +38,19 @@ public class RobotContainer {
 
     private final StartEndCommand elevatorDownCommand =
             new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorSpeed(-.25),
-                    () -> elevatorSubsystem.setElevatorSpeed(0),
+                    () -> elevatorSubsystem.setElevatorVelocity(-0.25),
+                    () -> elevatorSubsystem.setElevatorVelocity(0),
                     elevatorSubsystem);
 
     private final StartEndCommand elevatorUpCommand =
             new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorSpeed(.25),
-                    () -> elevatorSubsystem.setElevatorSpeed(0),
+                    () -> elevatorSubsystem.setElevatorVelocity(0.25),
+                    () -> elevatorSubsystem.setElevatorVelocity(0),
                     elevatorSubsystem);
 
     private final StartEndCommand shootCommand =
             new StartEndCommand(
-                    () -> shooterSubsystem.setSpeed(.25),
+                    () -> shooterSubsystem.setSpeed(0.25),
                     () -> shooterSubsystem.setSpeed(0),
                     shooterSubsystem);
 
@@ -66,19 +59,10 @@ public class RobotContainer {
         driveSubsystem.calibrateGyro();
     }
 
-    // private void shuffleboardSetup() {
-    //     final ShuffleboardTab tab = Shuffleboard.getTab("Driver Board");
-
-    //     tab.add("Select program for auto", chooser);
-    //     chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
-    //     chooser.addOption("4 meter", fourMeterAuto.getCommand());
-    // }
-
     public RobotContainer() {
-        shuffleBoardHelper = new ShuffleBoardHelper(driveSubsystem);
         calibrate();
-        // shuffleboardSetup();
         configureButtonBindings();
+        shuffleBoardHelper = new ShuffleBoardHelper(driveSubsystem);
 
         driveSubsystem.setDefaultCommand(
                 new RunCommand(
