@@ -98,7 +98,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // drive back with 3 meter or 4 meter, aim, shoot
         return new SequentialCommandGroup(
-                // lambda?
                 shuffleBoardHelper.getSelectedCommand(),
                 autoAimCommand.withTimeout(2),
                 shootCommand.withTimeout(5));

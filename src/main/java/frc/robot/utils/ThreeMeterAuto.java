@@ -24,7 +24,7 @@ public class ThreeMeterAuto {
                         new InstantCommand(
                                 () -> driveSubsystem.resetPose(path.getInitialPose()),
                                 driveSubsystem),
-                        driveSubsystem.ramsete(path),
+                        driveSubsystem.ramseteCommand(path),
                         new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
     }
 

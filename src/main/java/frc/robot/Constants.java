@@ -83,7 +83,7 @@ public final class Constants {
         public static final double TRACK_WIDTH_METERS = 0.638;
         public static final int MAG_ENCODER_CPR = 4096;
         public static final int TALONFX_ENCODER_CPR = 2048;
-        // !remove if not using an integrated encoder
+        // !remove from calculations if not using an integrated encoder
         public static final double GEAR_RATIO =
                 11.25; // 12:50 => 20:54 on a falconfx gives 14.8 fps. Driven/Driver
         public static final double WHEEL_DIAMETER_METERS = 0.15875;
@@ -91,9 +91,10 @@ public final class Constants {
         public static final int TIMEOUT = 50;
     }
 
-    /** Mappings between physical CAN devices and their corresponding ID in the CAN chain */
+    /** Mapping between physical CAN devices and their corresponding ID in the CAN chain */
     public static final class CanIdConstants {
 
+        // Note: PDP is always 0
         public static final int LEFT_MASTER_ID = 1;
         public static final int LEFT_SLAVE_ID = 2;
         public static final int RIGHT_MASTER_ID = 3;

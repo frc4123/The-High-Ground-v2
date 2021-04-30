@@ -16,8 +16,8 @@ import java.util.function.DoubleSupplier;
 
 public class AutoAimCommand extends CommandBase {
 
-    private DriveSubsystem driveSubsystem;
-    private RobotContainer robotContainer;
+    private final DriveSubsystem driveSubsystem;
+    private final RobotContainer robotContainer;
     private DoubleSupplier forward;
     private double rotationSpeed;
 
@@ -53,8 +53,7 @@ public class AutoAimCommand extends CommandBase {
                         >= AutoAimConstants.TOLERANCE)) {
             rotationSpeed =
                     -controller.calculate(Vision.result.getBestTarget().getYaw(), 0)
-                            + ((Vision.result.getBestTarget().getYaw()
-                                            / Math.abs(Vision.result.getBestTarget().getYaw()))
+                            + (Math.copySign(1, Vision.result.getBestTarget().getYaw())
                                     * AutoAimConstants.FFW);
         } else {
             rotationSpeed = 0;

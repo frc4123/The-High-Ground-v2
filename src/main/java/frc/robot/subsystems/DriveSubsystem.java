@@ -59,6 +59,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final PIDController ramseteController = new PIDController(TrajectoryConstants.KP, 0, 0);
 
+    /**
+     * Configuration for a {@code Trajectory}. See {@see TrajectoryConstraint} for a list of
+     * contraint decorators.
+     */
     private final TrajectoryConfig config =
             new TrajectoryConfig(
                             TrajectoryConstants.MAX_VELOCITY, TrajectoryConstants.MAX_ACCELERATION)
@@ -130,6 +134,8 @@ public class DriveSubsystem extends SubsystemBase {
      * Arcade style drive. Values are squared to decrease sensitivity at low values. Please use the
      * left stick for translation and the right stick for rotation.
      *
+     * <p>See {@link DifferentialDrive#curvatureDrive()} for another good drive system.
+     *
      * @param fwd the translation component
      * @param rot the rotation component
      */
@@ -152,7 +158,7 @@ public class DriveSubsystem extends SubsystemBase {
     /**
      * Returns the {@code DifferentialDrive} object.
      *
-     * @return the DifferentialDrive instance
+     * @return the {@link DifferentialDrive} instance
      */
     public DifferentialDrive getDifferentialDrive() {
         return differentialDrive;
@@ -175,7 +181,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @return the heading of the gyro
      */
     public double getHeading() {
-        // make sure this
+        // make sure this is negated if necessary
         return gyro.getRotation2d().getDegrees();
     }
 
@@ -184,7 +190,7 @@ public class DriveSubsystem extends SubsystemBase {
         gyro.calibrate();
     }
 
-    /** Resets the gyro to a heading of 0. */
+    /** Sets the gyro to a heading of 0 degrees. */
     public void resetGyro() {
         gyro.reset();
     }
@@ -196,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Resets the specified pose. Resets the drive train encoders and the {@link Pose2d} object.
+     * Resets the specified pose. Resets the drive train encoders and the {@link Pose2d} instance.
      *
      * @param pose the Pose2d instance to reset
      */
@@ -204,10 +210,6 @@ public class DriveSubsystem extends SubsystemBase {
         resetEncoders();
         odometry.resetPosition(pose, gyro.getRotation2d());
     }
-
-    // public double getAverageDistance() {
-    //   return ((getLeftWheelPosition() + getRightWheelPosition()) / 2);
-    // }
 
     /**
      * Returns a {@code DifferentialDriveWheelSpeeds} object.
@@ -280,12 +282,12 @@ public class DriveSubsystem extends SubsystemBase {
         return odometry.getPoseMeters();
     }
     /**
-     * Returns the {@code RamseteCommand}. Used to follow the speifided {@link Trajectory}.
+     * Returns a {@code RamseteCommand} object. Used to follow the speifided {@link Trajectory}.
      *
      * @param path the {@code Trajectory} to follow
      * @return a {@link RamseteCommand} object
      */
-    public RamseteCommand ramsete(Trajectory path) {
+    public RamseteCommand ramseteCommand(Trajectory path) {
         return new RamseteCommand(
                 path,
                 odometry::getPoseMeters,

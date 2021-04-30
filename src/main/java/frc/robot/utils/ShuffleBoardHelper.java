@@ -21,11 +21,10 @@ public class ShuffleBoardHelper {
     private final SimpleWidget pdpWidget;
     private final ComplexWidget cameraStreamWidget;
     private final HttpCamera cameraStream;
-
     private final SendableChooser<Command> chooser = new SendableChooser<>();
 
     /**
-     * Use to create all {@code ShuffleBoard} widgets for the robot.
+     * Used to create all {@code ShuffleBoard} widgets for the robot.
      *
      * @param driveSubsystem the drive subsystem
      */
@@ -62,6 +61,11 @@ public class ShuffleBoardHelper {
                         .withSize(3, 2);
     }
 
+    /**
+     * Returns the selected command in the {@code SendableChooser} box in {@code Shuffleboard}.
+     *
+     * @return the selected autonomous command
+     */
     public Command getSelectedCommand() {
         return chooser.getSelected();
     }
