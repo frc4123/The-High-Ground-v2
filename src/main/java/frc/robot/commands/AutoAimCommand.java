@@ -18,6 +18,7 @@ public class AutoAimCommand extends CommandBase {
 
     private final DriveSubsystem driveSubsystem;
     private final RobotContainer robotContainer;
+    private final Vision vision;
     private DoubleSupplier forward;
     private double rotationSpeed;
 
@@ -32,14 +33,19 @@ public class AutoAimCommand extends CommandBase {
      * translate the robot.
      *
      * @param driveSubsystem the driveSubsystem
+     * @param vision the vision
      * @param robotContainer the robotContainer
      * @param forward the {@code DoubleSupplier} from the driver controller's translation component.
      */
     public AutoAimCommand(
-            DriveSubsystem driveSubsystem, RobotContainer robotContainer, DoubleSupplier forward) {
+            DriveSubsystem driveSubsystem,
+            Vision vision,
+            RobotContainer robotContainer,
+            DoubleSupplier forward) {
         this.driveSubsystem = driveSubsystem;
         this.forward = forward;
         this.robotContainer = robotContainer;
+        this.vision = vision;
         rotationSpeed = 0;
         controller.setTolerance(AutoAimConstants.TOLERANCE);
         addRequirements(driveSubsystem);
@@ -47,13 +53,13 @@ public class AutoAimCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Vision.result = Vision.camera.getLatestResult();
-        if (Vision.result.hasTargets()
-                && (Math.abs(Vision.result.getBestTarget().getYaw())
-                        >= AutoAimConstants.TOLERANCE)) {
+        var result = vision.camera.getLatestResult();
+
+        if (result.hasTargets()
+                && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
             rotationSpeed =
-                    -controller.calculate(Vision.result.getBestTarget().getYaw(), 0)
-                            + (Math.copySign(1, Vision.result.getBestTarget().getYaw())
+                    -controller.calculate(result.getBestTarget().getYaw(), 0)
+                            + (Math.copySign(1, result.getBestTarget().getYaw())
                                     * AutoAimConstants.FFW);
         } else {
             rotationSpeed = 0;

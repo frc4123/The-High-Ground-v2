@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import frc.robot.Constants.AutoAimConstants;
+import frc.robot.utils.Vision;
+
 public class Robot extends TimedRobot {
 
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private final Vision vision = new Vision();
 
     @Override
     public void robotInit() {
@@ -50,25 +54,23 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        // TODO fix this
-        // set boolean box to true and false at any period during teleop
-        // try {
-        //     if (Vision.result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
-        //         robotContainer
-        //                 .getShuffleBoardHelper()
-        //                 .getIsCameraCentredWidget()
-        //                 .getEntry()
-        //                 .setBoolean(true);
-        //     } else if (Vision.result.getBestTarget().getYaw() >= AutoAimConstants.TOLERANCE) {
-        //         robotContainer
-        //                 .getShuffleBoardHelper()
-        //                 .getIsCameraCentredWidget()
-        //                 .getEntry()
-        //                 .setBoolean(false);
-        //     }
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+        var result = vision.camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
+                robotContainer
+                        .getShuffleBoardHelper()
+                        .getIsCameraCentredWidget()
+                        .getEntry()
+                        .setBoolean(true);
+            }
+        } else {
+            robotContainer
+                    .getShuffleBoardHelper()
+                    .getIsCameraCentredWidget()
+                    .getEntry()
+                    .setBoolean(false);
+        }
     }
 
     @Override

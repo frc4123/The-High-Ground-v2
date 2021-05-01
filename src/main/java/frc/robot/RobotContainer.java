@@ -20,6 +20,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utils.ShuffleBoardHelper;
+import frc.robot.utils.Vision;
 
 public class RobotContainer {
 
@@ -30,11 +31,15 @@ public class RobotContainer {
     private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
+    private final Vision vision = new Vision();
     private final ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
             new AutoAimCommand(
-                    driveSubsystem, this, () -> -driverController.getY(GenericHID.Hand.kLeft));
+                    driveSubsystem,
+                    vision,
+                    this,
+                    () -> -driverController.getY(GenericHID.Hand.kLeft));
 
     private final StartEndCommand elevatorDownCommand =
             new StartEndCommand(
