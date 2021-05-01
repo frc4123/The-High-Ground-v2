@@ -23,7 +23,6 @@ public class AutoAimCommand extends CommandBase {
     private double rotationSpeed;
 
     // !characterize the robot for these values
-    // private static PhotonCamera camera = new PhotonCamera(AutoAimConstants.CAMERA_NAME);
 
     private static PIDController controller =
             new PIDController(AutoAimConstants.KP, AutoAimConstants.KI, AutoAimConstants.KD);
@@ -32,9 +31,9 @@ public class AutoAimCommand extends CommandBase {
      * Rotates the robot to the a target if there is one. This command only rotates; you are free to
      * translate the robot.
      *
-     * @param driveSubsystem the driveSubsystem
-     * @param vision the vision
-     * @param robotContainer the robotContainer
+     * @param driveSubsystem the driveSubsystem instance
+     * @param vision the vision object
+     * @param robotContainer the robotContainer instance
      * @param forward the {@code DoubleSupplier} from the driver controller's translation component.
      */
     public AutoAimCommand(
