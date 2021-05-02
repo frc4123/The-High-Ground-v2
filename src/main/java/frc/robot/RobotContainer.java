@@ -117,6 +117,8 @@ public class RobotContainer {
         Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
         // POVButton povUp = new POVButton(driverController, 0);
         // POVButton povDown = new POVButton(driverController, 180);
+        // POVButton povLeft = new POVButton(driverController, 90);
+        // POVButton povRight = new POVButton(driverController, 270);
 
         // interact with buttons
         lb.whileHeld(elevatorDownCommand);

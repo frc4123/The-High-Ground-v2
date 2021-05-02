@@ -53,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final DifferentialDriveVoltageConstraint autoVoltageConstraint =
             new DifferentialDriveVoltageConstraint(
-                    TrajectoryConstants.SIMPLE_MOTOR_FEED_FOWARD,
+                    TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD,
                     TrajectoryConstants.DRIVE_KINEMATICS,
                     10);
 
@@ -292,7 +292,7 @@ public class DriveSubsystem extends SubsystemBase {
                 path,
                 odometry::getPoseMeters,
                 new RamseteController(),
-                TrajectoryConstants.SIMPLE_MOTOR_FEED_FOWARD,
+                TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD,
                 TrajectoryConstants.DRIVE_KINEMATICS,
                 this::getWheelSpeeds,
                 ramseteController,

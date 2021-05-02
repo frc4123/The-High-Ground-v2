@@ -19,7 +19,7 @@ public final class Constants {
         public static final int USB_PORT_2 = 2;
         public static final int USB_PORT_3 = 3;
     }
-    /** Xbox buttons to their coresponding integer value. */
+    /** Xbox buttons to their corresponding integer value. */
     public static final class XboxConstants {
 
         // Button mappings
@@ -50,11 +50,11 @@ public final class Constants {
         // Direction pad lookup angles
         public static int POV_UP = 0;
         public static int POV_RIGHT = 90;
-        public static int POV_DOWNN = 180;
+        public static int POV_DOWN = 180;
         public static int POV_LEFT = 270;
     }
     /**
-     * PS4 buttons and their coresponding integer value. Note: you must use DS4Windows in order to
+     * PS4 buttons and their corresponding integer value. Note: you must use DS4Windows in order to
      * use a PS4 controller on a computer
      */
     public static final class PS4Constants {
@@ -65,7 +65,7 @@ public final class Constants {
         public static int TRIANGLE_BUTTON = 4;
     }
 
-    /** Logitec buttons to their coresponding integer value */
+    /** Logitech buttons to their corresponding integer value */
     public static final class LogitechConstants {
 
         public static final int ONE_BUTTON = 1;
@@ -130,7 +130,7 @@ public final class Constants {
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
                 new DifferentialDriveKinematics(DriveConstants.TRACK_WIDTH_METERS);
 
-        public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEED_FOWARD =
+        public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEED_FOrWARD =
                 new SimpleMotorFeedforward(
                         TrajectoryConstants.KS, TrajectoryConstants.KV, TrajectoryConstants.KA);
     }
@@ -148,7 +148,6 @@ public final class Constants {
         // public static final double KA = 0;
         // public static final double KV = 0;
         // public static final double KS = 0;
-        // may be undded with the setTolerance method
         public static final double TOLERANCE = 0.09;
     }
 }

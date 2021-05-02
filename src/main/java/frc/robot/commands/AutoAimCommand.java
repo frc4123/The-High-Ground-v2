@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoAimConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.utils.Rumble;
 import frc.robot.utils.Vision;
 
 import java.util.function.DoubleSupplier;
@@ -19,6 +20,7 @@ public class AutoAimCommand extends CommandBase {
     private final DriveSubsystem driveSubsystem;
     private final RobotContainer robotContainer;
     private final Vision vision;
+    private final Rumble rumble = new Rumble();
     private DoubleSupplier forward;
     private double rotationSpeed;
 
@@ -68,8 +70,11 @@ public class AutoAimCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if (controller.atSetpoint()) {
-            // TODO not running for some reason
-            new RumbleCommand(robotContainer.getDriverController(), 0.5, 0.5).schedule();
+            try {
+                rumble.start(robotContainer.getDriverController(), 1);
+            } catch (IllegalArgumentException | IllegalStateException | InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         } else {
             return false;
