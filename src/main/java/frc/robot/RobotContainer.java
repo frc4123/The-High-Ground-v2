@@ -18,18 +18,22 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeDrawSubsystem;
+import frc.robot.subsystems.IntakeWheelsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utils.ShuffleBoardHelper;
 import frc.robot.utils.Vision;
 
 public class RobotContainer {
-
+    // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/smartdashboard/setting-robot-preferences-from-smartdashboard.html
     private final XboxController driverController =
             new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
 
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
     private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    private final IntakeWheelsSubsystem intakeWheelsSubsystem = new IntakeWheelsSubsystem();
+    private final IntakeDrawSubsystem intakeDrawSubsystem = new IntakeDrawSubsystem();
 
     private final Vision vision = new Vision();
     private final ShuffleBoardHelper shuffleBoardHelper;
@@ -43,27 +47,51 @@ public class RobotContainer {
 
     private final StartEndCommand elevatorDownCommand =
             new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorVelocity(-0.25),
-                    () -> elevatorSubsystem.setElevatorVelocity(0),
+                    () -> elevatorSubsystem.setElevatorVelo(-0.25),
+                    () -> elevatorSubsystem.setElevatorVelo(0),
                     elevatorSubsystem);
 
     private final StartEndCommand elevatorUpCommand =
             new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorVelocity(0.25),
-                    () -> elevatorSubsystem.setElevatorVelocity(0),
+                    () -> elevatorSubsystem.setElevatorVelo(0.25),
+                    () -> elevatorSubsystem.setElevatorVelo(0),
                     elevatorSubsystem);
 
     private final StartEndCommand shootCommand =
             new StartEndCommand(
-                    () -> shooterSubsystem.setSpeed(0.25),
-                    () -> shooterSubsystem.setSpeed(0),
+                    () -> shooterSubsystem.setShooterVelo(0.25),
+                    () -> shooterSubsystem.setShooterVelo(0),
                     shooterSubsystem);
+
+    private final StartEndCommand intakeDrawUpCommand =
+            new StartEndCommand(
+                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.25),
+                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.0),
+                    intakeDrawSubsystem);
+
+    private final StartEndCommand intakeDrawDownCommand =
+            new StartEndCommand(
+                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.25),
+                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.0),
+                    intakeDrawSubsystem);
+    private final StartEndCommand intakeWheelsCommand =
+            new StartEndCommand(
+                    () -> intakeWheelsSubsystem.setIntakeWheelsVelo(0.80),
+                    () -> intakeWheelsSubsystem.setIntakeWheelsVelo(0.0),
+                    intakeWheelsSubsystem);
 
     private void calibrate() {
         System.out.println("Gyro is calibrating...");
         driveSubsystem.calibrateGyro();
     }
 
+    /**
+     * The {@link RobotContainer} object. Instantiates button bindings and sets the default command.
+     *
+     * <p>You should set up all configuration of the robot subsystems, commands, and helper
+     * functions in this class as if this were a typical "Main" class. Make sure you only make one
+     * object for these, and use getters as necessary.
+     */
     public RobotContainer() {
         calibrate();
         configureButtonBindings();
@@ -84,21 +112,28 @@ public class RobotContainer {
         Button lb = new JoystickButton(driverController, XboxConstants.LB_BUTTON);
         Button rb = new JoystickButton(driverController, XboxConstants.RB_BUTTON);
         Button a = new JoystickButton(driverController, XboxConstants.A_BUTTON);
-        // Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
-        // Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
-        // Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
+        Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
+        Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
+        Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
+        // POVButton povUp = new POVButton(driverController, 0);
+        // POVButton povDown = new POVButton(driverController, 180);
 
         // interact with buttons
         lb.whileHeld(elevatorDownCommand);
         rb.whileHeld(elevatorUpCommand);
         a.whenHeld(autoAimCommand);
-        // a.whileHeld(shootCommand);
+        b.whileHeld(intakeWheelsCommand);
+        // TODO see how long it takes to fall down and update values accordingly
+        x.whenPressed(intakeDrawDownCommand.withTimeout(2));
+        y.whenPressed(intakeDrawUpCommand.withTimeout(2));
+        // povUp.whenPressed(command);
+        // povDown.whenPressed(command);
     }
 
     /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
+     * Used to pass the autonomous {@link Command} to the main {@link Robot} class.
      *
-     * @return the command to run in autonomous
+     * @return the {@link Command} or CommandGroup to run in autonomous
      */
     public Command getAutonomousCommand() {
         // drive back with 3 meter or 4 meter, aim, shoot
@@ -108,10 +143,21 @@ public class RobotContainer {
                 shootCommand.withTimeout(5));
     }
 
+    /**
+     * This {@link #shuffleBoardHelper}.
+     *
+     * @return this {@link #shuffleBoardHelper}
+     */
     public ShuffleBoardHelper getShuffleBoardHelper() {
         return shuffleBoardHelper;
     }
 
+    /**
+     * This {@link #driverController}. This is an {@link XboxController} that is used by the main
+     * driver of the robot.
+     *
+     * @return this {@link #driverController}
+     */
     public XboxController getDriverController() {
         return driverController;
     }

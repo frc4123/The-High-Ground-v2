@@ -79,5 +79,23 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+        var result = vision.camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
+                robotContainer
+                        .getShuffleBoardHelper()
+                        .getIsCameraCentredWidget()
+                        .getEntry()
+                        .setBoolean(true);
+            }
+        } else {
+            robotContainer
+                    .getShuffleBoardHelper()
+                    .getIsCameraCentredWidget()
+                    .getEntry()
+                    .setBoolean(false);
+        }
+    }
 }

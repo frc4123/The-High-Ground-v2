@@ -14,24 +14,25 @@ import frc.robot.Constants.CanIdConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-    private final VictorSPX elevatorMotor = new VictorSPX(CanIdConstants.ELEVATOR_MOTOR_ID);
+    private final VictorSPX motor = new VictorSPX(CanIdConstants.ELEVATOR_MOTOR_ID);
 
+    /** Creates a new ElevatorSubsystem */
     public ElevatorSubsystem() {
-        elevatorMotor.configOpenloopRamp(1);
-        elevatorMotor.setNeutralMode(NeutralMode.Brake);
+        motor.configOpenloopRamp(1);
+        motor.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
-     * Sets the elevator velocity. Value is calmped between -1.0 and 1.0.
+     * Sets the elevator velocity. Value is clamped between -1.0 and 1.0.
      *
-     * @param speed the velocity to set the motor to.
+     * @param velo the velocity to set the motor to.
      */
-    public void setElevatorVelocity(double speed) {
-        if (speed > 1.0) {
-            speed = 1.0;
-        } else if (speed < -1.0) {
-            speed = -1.0;
+    public void setElevatorVelo(double velo) {
+        if (velo > 1.0) {
+            velo = 1.0;
+        } else if (velo < -1.0) {
+            velo = -1.0;
         }
-        elevatorMotor.set(ControlMode.PercentOutput, speed);
+        motor.set(ControlMode.PercentOutput, velo);
     }
 }

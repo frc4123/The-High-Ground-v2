@@ -23,17 +23,16 @@ public class AutoAimCommand extends CommandBase {
     private double rotationSpeed;
 
     // !characterize the robot for these values
-
-    private static PIDController controller =
+    private final PIDController controller =
             new PIDController(AutoAimConstants.KP, AutoAimConstants.KI, AutoAimConstants.KD);
 
     /**
      * Rotates the robot to the a target if there is one. This command only rotates; you are free to
      * translate the robot.
      *
-     * @param driveSubsystem the driveSubsystem instance
-     * @param vision the vision object
-     * @param robotContainer the robotContainer instance
+     * @param driveSubsystem a driveSubsystem instance
+     * @param vision a vision instance
+     * @param robotContainer a robotContainer instance
      * @param forward the {@code DoubleSupplier} from the driver controller's translation component.
      */
     public AutoAimCommand(
@@ -68,7 +67,6 @@ public class AutoAimCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-
         if (controller.atSetpoint()) {
             // TODO not running for some reason
             new RumbleCommand(robotContainer.getDriverController(), 0.5, 0.5).schedule();

@@ -21,11 +21,14 @@ public class ShuffleBoardHelper {
     private final SimpleWidget isCameraCentredWidget;
     private final SimpleWidget pdpWidget;
     private final ComplexWidget cameraStreamWidget;
+
+    @SuppressWarnings("unused")
     private final HttpCamera cameraStream;
-    private final SendableChooser<Command> chooser = new SendableChooser<>();
+
+    private SendableChooser<Command> chooser = new SendableChooser<>();
 
     /**
-     * Used to create all {@code ShuffleBoard} widgets for the robot.
+     * Used to create all {@link Shuffleboard} widgets for the robot.
      *
      * @param driveSubsystem the drive subsystem
      */
@@ -71,7 +74,7 @@ public class ShuffleBoardHelper {
     }
 
     /**
-     * Returns the selected command in the {@code SendableChooser} box in {@code Shuffleboard}.
+     * Returns the selected {@code Command} in the {@link SendableChooser} box on Shuffleboard.
      *
      * @return the selected autonomous command
      */
@@ -79,14 +82,32 @@ public class ShuffleBoardHelper {
         return chooser.getSelected();
     }
 
+    /**
+     * Returns this {@link #isCameraCentredWidget}. This is a boolean box that shows whether the
+     * front camera is centered on a target.
+     *
+     * @return this {@link #isCameraCentredWidget}
+     */
     public SimpleWidget getIsCameraCentredWidget() {
         return isCameraCentredWidget;
     }
 
+    /**
+     * Returns this {@link #cameraStreamWidget}. This will either be a processed {@link HttpCamera}
+     * stream or an unprocessed {@link UsbCamera} stream.
+     *
+     * @return this {@link cameraStreamWidget}
+     */
     public ComplexWidget getCameraStreamWidget() {
         return cameraStreamWidget;
     }
 
+    /**
+     * Returns this {@link #pdpWidget}. This displays the power draw per PDP channel and total
+     * voltage and amperage.
+     *
+     * @return this {@link #pdpWidget}
+     */
     public SimpleWidget getPdpWidget() {
         return pdpWidget;
     }

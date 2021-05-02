@@ -16,8 +16,8 @@ public final class Constants {
 
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int AUXDRIVER_CONTROLLER_PORT = 1;
-        public static final int MISC_PORT_1 = 2;
-        public static final int MISC_PORT_2 = 3;
+        public static final int USB_PORT_2 = 2;
+        public static final int USB_PORT_3 = 3;
     }
     /** Xbox buttons to their coresponding integer value. */
     public static final class XboxConstants {
@@ -99,8 +99,8 @@ public final class Constants {
         public static final int LEFT_SLAVE_ID = 2;
         public static final int RIGHT_MASTER_ID = 3;
         public static final int RIGHT_SLAVE_ID = 4;
-        public static final int INTAKE_ROLLER_ID = 5;
-        public static final int INTAKE_GATE_ID = 6;
+        public static final int INTAKE_WHEELS_ID = 5;
+        public static final int INTAKE_DRAW_ID = 6;
         public static final int SHOOTER_MASTER_ID = 7;
         public static final int SHOOTER_SLAVE_ID = 8;
         public static final int WINCH_MASTER_ID = 9;

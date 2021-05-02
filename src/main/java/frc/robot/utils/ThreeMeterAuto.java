@@ -16,6 +16,10 @@ public class ThreeMeterAuto {
     private final Trajectory path;
     private final Command command;
 
+    /**
+     * Auto profile that drives 3 meters backwards.
+     * @param driveSubsystem the driveSubsystem
+     */
     public ThreeMeterAuto(DriveSubsystem driveSubsystem) {
         path = driveSubsystem.pathList.get(0);
 
@@ -28,6 +32,10 @@ public class ThreeMeterAuto {
                         new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
     }
 
+     /**
+     * Returns this Command
+     * @return this Command
+     */
     public Command getCommand() {
         System.out.println("Three meters");
         return command;

@@ -103,11 +103,7 @@ Temporary Items
 .apdisk
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -159,3 +155,4 @@ imgui.ini
 
 
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
+.vscode/settings.json
