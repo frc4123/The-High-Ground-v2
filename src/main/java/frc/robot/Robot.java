@@ -25,6 +25,23 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        var result = vision.camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
+                robotContainer
+                        .getShuffleBoardHelper()
+                        .getIsCameraCentredWidget()
+                        .getEntry()
+                        .setBoolean(true);
+            }
+        } else {
+            robotContainer
+                    .getShuffleBoardHelper()
+                    .getIsCameraCentredWidget()
+                    .getEntry()
+                    .setBoolean(false);
+        }
     }
 
     @Override
@@ -53,25 +70,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {
-        var result = vision.camera.getLatestResult();
-
-        if (result.hasTargets()) {
-            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
-                robotContainer
-                        .getShuffleBoardHelper()
-                        .getIsCameraCentredWidget()
-                        .getEntry()
-                        .setBoolean(true);
-            }
-        } else {
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getIsCameraCentredWidget()
-                    .getEntry()
-                    .setBoolean(false);
-        }
-    }
+    public void teleopPeriodic() {}
 
     @Override
     public void testInit() {
@@ -79,23 +78,5 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testPeriodic() {
-        var result = vision.camera.getLatestResult();
-
-        if (result.hasTargets()) {
-            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
-                robotContainer
-                        .getShuffleBoardHelper()
-                        .getIsCameraCentredWidget()
-                        .getEntry()
-                        .setBoolean(true);
-            }
-        } else {
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getIsCameraCentredWidget()
-                    .getEntry()
-                    .setBoolean(false);
-        }
-    }
+    public void testPeriodic() {}
 }
