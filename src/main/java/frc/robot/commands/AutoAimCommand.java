@@ -20,7 +20,7 @@ public class AutoAimCommand extends CommandBase {
     private final DriveSubsystem driveSubsystem;
     private final RobotContainer robotContainer;
     private final Vision vision;
-    private final Rumble rumble = new Rumble();
+    private final Rumble rumble;
     private DoubleSupplier forward;
     private double rotationSpeed;
 
@@ -46,6 +46,7 @@ public class AutoAimCommand extends CommandBase {
         this.forward = forward;
         this.robotContainer = robotContainer;
         this.vision = vision;
+        rumble = new Rumble();
         rotationSpeed = 0;
         controller.setTolerance(AutoAimConstants.TOLERANCE);
         addRequirements(driveSubsystem);

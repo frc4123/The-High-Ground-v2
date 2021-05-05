@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import frc.robot.Constants.AutoAimConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
+
+import org.photonvision.PhotonUtils;
 
 import java.util.Map;
 
@@ -21,6 +25,7 @@ public class ShuffleBoardHelper {
     private final SimpleWidget isCameraCentredWidget;
     private final SimpleWidget pdpWidget;
     private final ComplexWidget cameraStreamWidget;
+    private final SimpleWidget distanceToTargetWidget;
 
     @SuppressWarnings("unused")
     private final HttpCamera cameraStream;
@@ -37,14 +42,14 @@ public class ShuffleBoardHelper {
 
         fourMeterAuto = new FourMeterAuto(driveSubsystem);
         threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
-        cameraStream =
-                new HttpCamera(
-                        "Photon Vision", "http://10.41.23.33:1182/stream.mjpg?1619731336501");
 
         driverTab.add("Select program for auto", chooser).withPosition(0, 0).withSize(2, 1);
         chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
 
+        cameraStream =
+                new HttpCamera(
+                        "Photon Vision", "http://10.41.23.33:1182/stream.mjpg?1619731336501");
         isCameraCentredWidget =
                 driverTab
                         .add("Is target centered?", false)
@@ -71,6 +76,17 @@ public class ShuffleBoardHelper {
                         .add("PDP", BuiltInWidgets.kPowerDistributionPanel)
                         .withPosition(0, 7)
                         .withSize(3, 2);
+        distanceToTargetWidget =
+                driverTab
+                        .add(
+                                "Distance to target",
+                                PhotonUtils.calculateDistanceToTargetMeters(
+                                        AutoAimConstants.CAMERA_HEIGHT_METERS,
+                                        AutoAimConstants.TARGET_HEIGHT_METERS,
+                                        AutoAimConstants.CAMERA_PITCH_RADIANS,
+                                        Math.toRadians(
+                                                Robot.getResult().getBestTarget().getPitch())))
+                        .withWidget(BuiltInWidgets.kNumberBar);
     }
 
     /**

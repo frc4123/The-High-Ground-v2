@@ -148,6 +148,13 @@ public final class Constants {
         // public static final double KA = 0;
         // public static final double KV = 0;
         // public static final double KS = 0;
-        public static final double TOLERANCE = 0.09;
+
+        /** Tolerance for the Vision PID. Units are in degrees. */
+        public static final double TOLERANCE = 0.1;
+
+        // TODO get these values
+        public static final double CAMERA_HEIGHT_METERS = .07;
+        public static final double TARGET_HEIGHT_METERS = 2.4384;
+        public static final double CAMERA_PITCH_RADIANS = Math.toRadians(25);
     }
 }

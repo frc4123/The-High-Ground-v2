@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.AutoAimConstants;
 import frc.robot.utils.Vision;
 
+import org.photonvision.PhotonPipelineResult;
+
 public class Robot extends TimedRobot {
 
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private static PhotonPipelineResult result;
     private final Vision vision = new Vision();
 
     @Override
@@ -25,7 +28,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        var result = vision.camera.getLatestResult();
+
+        result = vision.camera.getLatestResult();
 
         if (result.hasTargets()) {
             if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
@@ -57,6 +61,10 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+    }
+
+    public static PhotonPipelineResult getResult() {
+        return result;
     }
 
     @Override
