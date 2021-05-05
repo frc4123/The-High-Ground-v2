@@ -18,11 +18,12 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
     private static PhotonPipelineResult result;
-    private final Vision vision = new Vision();
+    private Vision vision;
 
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
+        vision = new Vision();
     }
 
     @Override
@@ -32,12 +33,18 @@ public class Robot extends TimedRobot {
         result = vision.camera.getLatestResult();
 
         if (result.hasTargets()) {
-            if (result.getBestTarget().getYaw() <= AutoAimConstants.TOLERANCE) {
+            if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE + 1.0) {
                 robotContainer
                         .getShuffleBoardHelper()
                         .getIsCameraCentredWidget()
                         .getEntry()
                         .setBoolean(true);
+            } else {
+                robotContainer
+                        .getShuffleBoardHelper()
+                        .getIsCameraCentredWidget()
+                        .getEntry()
+                        .setBoolean(false);
             }
         } else {
             robotContainer

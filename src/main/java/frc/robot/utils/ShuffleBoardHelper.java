@@ -1,7 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.cscore.HttpCamera;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -10,11 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.Constants.AutoAimConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
-
-import org.photonvision.PhotonUtils;
 
 import java.util.Map;
 
@@ -23,11 +19,12 @@ public class ShuffleBoardHelper {
     private final FourMeterAuto fourMeterAuto;
     private final ShuffleboardTab driverTab;
     private final SimpleWidget isCameraCentredWidget;
-    private final SimpleWidget pdpWidget;
+    private PowerDistributionPanel pdp = new PowerDistributionPanel();
+    private final ComplexWidget pdpWidget;
     private final ComplexWidget cameraStreamWidget;
-    private final SimpleWidget distanceToTargetWidget;
+    //     private final SimpleWidget distanceToTargetWidget;
 
-    @SuppressWarnings("unused")
+    //     @SuppressWarnings("unused")
     private final HttpCamera cameraStream;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
@@ -47,9 +44,7 @@ public class ShuffleBoardHelper {
         chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
 
-        cameraStream =
-                new HttpCamera(
-                        "Photon Vision", "http://10.41.23.33:1182/stream.mjpg?1619731336501");
+        cameraStream = new HttpCamera("Vision", "http://10.41.23.33:1182/?action=stream");
         isCameraCentredWidget =
                 driverTab
                         .add("Is target centered?", false)
@@ -67,26 +62,30 @@ public class ShuffleBoardHelper {
         // this gets the unprocessed camera footage.
         cameraStreamWidget =
                 driverTab
-                        .add(CameraServer.getInstance().startAutomaticCapture())
+                        .add(cameraStream)
                         .withPosition(2, 0)
                         .withSize(5, 4)
                         .withProperties(Map.of("Show controls", false));
         pdpWidget =
                 driverTab
-                        .add("PDP", BuiltInWidgets.kPowerDistributionPanel)
+                        .add("PDP", pdp)
+                        .withWidget(BuiltInWidgets.kPowerDistributionPanel)
                         .withPosition(0, 7)
                         .withSize(3, 2);
-        distanceToTargetWidget =
-                driverTab
-                        .add(
-                                "Distance to target",
-                                PhotonUtils.calculateDistanceToTargetMeters(
-                                        AutoAimConstants.CAMERA_HEIGHT_METERS,
-                                        AutoAimConstants.TARGET_HEIGHT_METERS,
-                                        AutoAimConstants.CAMERA_PITCH_RADIANS,
-                                        Math.toRadians(
-                                                Robot.getResult().getBestTarget().getPitch())))
-                        .withWidget(BuiltInWidgets.kNumberBar);
+        // needs to be done in periodic
+        // distanceToTargetWidget =
+        //         driverTab
+        //                 .add(
+        //                         "Distance to target",
+        //                         PhotonUtils.calculateDistanceToTargetMeters(
+        //                                 AutoAimConstants.CAMERA_HEIGHT_METERS,
+        //                                 AutoAimConstants.TARGET_HEIGHT_METERS,
+        //                                 AutoAimConstants.CAMERA_PITCH_RADIANS,
+        //                                 Math.toRadians(
+        //                                         Robot.getResult().getBestTarget().getPitch())))
+        //                 .withWidget(BuiltInWidgets.kNumberBar)
+        //                 .withPosition(7, 2)
+        //                 .withSize(2, 1);
     }
 
     /**
@@ -124,7 +123,11 @@ public class ShuffleBoardHelper {
      *
      * @return this {@link #pdpWidget}
      */
-    public SimpleWidget getPdpWidget() {
+    public ComplexWidget getPdpWidget() {
         return pdpWidget;
     }
+
+    //     public SimpleWidget getDistanceToTargetWidget() {
+    //         return distanceToTargetWidget;
+    //     }
 }
