@@ -154,10 +154,13 @@ public final class Constants {
         public static final double TOLERANCE = 0.1;
 
         // TODO get these values
-        private static final double CENTER_OF_TARGET = Units.inchesToMeters(8.375);
+        private static final double CENTER_OF_TARGET = 8.375;
         public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(21.375);
-        public static final double TARGET_HEIGHT_METERS =
-                Units.inchesToMeters(CENTER_OF_TARGET + 73.25);
-        public static final double CAMERA_PITCH_RADIANS = Math.toRadians(32.5);
+        // 73.25
+        // 53
+        // taller gives longer distance
+        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(83);
+        // measures 28 but gives bad result, so 23 is used
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(23);
     }
 }

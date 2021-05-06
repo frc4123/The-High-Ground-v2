@@ -28,13 +28,23 @@ public class Rumble {
         controller.setRumble(RumbleType.kRightRumble, power);
     }
 
+    /**
+     * Starts the rumble with the specified power and duration.
+     *
+     * @param power the power to rumble the controller at. Values are from -1 to 1
+     * @param durationMs the duration to rumble the controller for, in milliseconds
+     */
     public void startRumble(double power, int durationMs) {
         rumbleDurationMs = durationMs;
         rumbling = true;
         setRumble(power);
         lastRumbleStartMillis = System.currentTimeMillis();
     }
-
+    /**
+     * Starts the rumble with the specified power and a default time-out of 500 milliseconds.
+     *
+     * @param power the power to rumble the controller at. Values are from -1 to 1
+     */
     public void startRumble(double power) {
         startRumble(power, rumbleDurationMs);
     }
