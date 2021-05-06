@@ -21,6 +21,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeDrawSubsystem;
 import frc.robot.subsystems.IntakeWheelsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.utils.Rumble;
 import frc.robot.utils.ShuffleBoardHelper;
 import frc.robot.utils.Vision;
 
@@ -34,6 +35,7 @@ public class RobotContainer {
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final IntakeWheelsSubsystem intakeWheelsSubsystem = new IntakeWheelsSubsystem();
     private final IntakeDrawSubsystem intakeDrawSubsystem = new IntakeDrawSubsystem();
+    private final Rumble rumble = new Rumble(driverController);
 
     private final Vision vision = new Vision();
     private final ShuffleBoardHelper shuffleBoardHelper;
@@ -163,5 +165,9 @@ public class RobotContainer {
      */
     public XboxController getDriverController() {
         return driverController;
+    }
+
+    public Rumble getRumble() {
+        return rumble;
     }
 }

@@ -12,6 +12,7 @@ import frc.robot.Constants.AutoAimConstants;
 import frc.robot.utils.Vision;
 
 import org.photonvision.PhotonPipelineResult;
+import org.photonvision.PhotonUtils;
 
 public class Robot extends TimedRobot {
 
@@ -33,6 +34,18 @@ public class Robot extends TimedRobot {
         result = vision.camera.getLatestResult();
 
         if (result.hasTargets()) {
+            // distance update
+            robotContainer
+                    .getShuffleBoardHelper()
+                    .getDistanceToTargetWidget()
+                    .getEntry()
+                    .setDouble(
+                            PhotonUtils.calculateDistanceToTargetMeters(
+                                    AutoAimConstants.CAMERA_HEIGHT_METERS,
+                                    AutoAimConstants.TARGET_HEIGHT_METERS,
+                                    AutoAimConstants.CAMERA_PITCH_RADIANS,
+                                    Math.toRadians(Robot.getResult().getBestTarget().getPitch())));
+            // boolean update
             if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE + 1.0) {
                 robotContainer
                         .getShuffleBoardHelper()
@@ -53,6 +66,8 @@ public class Robot extends TimedRobot {
                     .getEntry()
                     .setBoolean(false);
         }
+
+        robotContainer.getRumble().periodic();
     }
 
     @Override

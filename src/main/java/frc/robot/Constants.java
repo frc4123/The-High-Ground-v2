@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
     /** USB ports on the computer */
@@ -153,8 +154,10 @@ public final class Constants {
         public static final double TOLERANCE = 0.1;
 
         // TODO get these values
-        public static final double CAMERA_HEIGHT_METERS = .07;
-        public static final double TARGET_HEIGHT_METERS = 2.4384;
-        public static final double CAMERA_PITCH_RADIANS = Math.toRadians(25);
+        private static final double CENTER_OF_TARGET = Units.inchesToMeters(8.375);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(21.375);
+        public static final double TARGET_HEIGHT_METERS =
+                Units.inchesToMeters(CENTER_OF_TARGET + 73.25);
+        public static final double CAMERA_PITCH_RADIANS = Math.toRadians(32.5);
     }
 }

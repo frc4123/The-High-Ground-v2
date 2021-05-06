@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.cscore.HttpCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
@@ -22,7 +23,7 @@ public class ShuffleBoardHelper {
     private PowerDistributionPanel pdp = new PowerDistributionPanel();
     private final ComplexWidget pdpWidget;
     private final ComplexWidget cameraStreamWidget;
-    //     private final SimpleWidget distanceToTargetWidget;
+    private final SimpleWidget distanceToTargetWidget;
 
     //     @SuppressWarnings("unused")
     private final HttpCamera cameraStream;
@@ -45,6 +46,7 @@ public class ShuffleBoardHelper {
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
 
         cameraStream = new HttpCamera("Vision", "http://10.41.23.33:1182/?action=stream");
+        CameraServer.getInstance().addCamera(cameraStream);
         isCameraCentredWidget =
                 driverTab
                         .add("Is target centered?", false)
@@ -73,19 +75,12 @@ public class ShuffleBoardHelper {
                         .withPosition(0, 7)
                         .withSize(3, 2);
         // needs to be done in periodic
-        // distanceToTargetWidget =
-        //         driverTab
-        //                 .add(
-        //                         "Distance to target",
-        //                         PhotonUtils.calculateDistanceToTargetMeters(
-        //                                 AutoAimConstants.CAMERA_HEIGHT_METERS,
-        //                                 AutoAimConstants.TARGET_HEIGHT_METERS,
-        //                                 AutoAimConstants.CAMERA_PITCH_RADIANS,
-        //                                 Math.toRadians(
-        //                                         Robot.getResult().getBestTarget().getPitch())))
-        //                 .withWidget(BuiltInWidgets.kNumberBar)
-        //                 .withPosition(7, 2)
-        //                 .withSize(2, 1);
+        distanceToTargetWidget =
+                driverTab
+                        .add("Distance to target", 0)
+                        .withWidget(BuiltInWidgets.kNumberBar)
+                        .withPosition(7, 2)
+                        .withSize(2, 1);
     }
 
     /**
@@ -127,7 +122,7 @@ public class ShuffleBoardHelper {
         return pdpWidget;
     }
 
-    //     public SimpleWidget getDistanceToTargetWidget() {
-    //         return distanceToTargetWidget;
-    //     }
+    public SimpleWidget getDistanceToTargetWidget() {
+        return distanceToTargetWidget;
+    }
 }
