@@ -11,11 +11,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.commands.AutoAimCommand;
+import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.IntakeDrawDownCommand;
+import frc.robot.commands.IntakeDrawUpCommand;
+import frc.robot.commands.IntakeWheelsInCommand;
+import frc.robot.commands.IntakeWheelsOutCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeDrawSubsystem;
@@ -26,19 +33,17 @@ import frc.robot.utils.ShuffleBoardHelper;
 import frc.robot.utils.Vision;
 
 public class RobotContainer {
-    // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/smartdashboard/setting-robot-preferences-from-smartdashboard.html
     private final XboxController driverController =
             new XboxController(UsbConstants.DRIVER_CONTROLLER_PORT);
+    public final Rumble rumble = new Rumble(driverController);
+    private final Vision vision = new Vision();
+    private final ShuffleBoardHelper shuffleBoardHelper;
 
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
     private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final IntakeWheelsSubsystem intakeWheelsSubsystem = new IntakeWheelsSubsystem();
     private final IntakeDrawSubsystem intakeDrawSubsystem = new IntakeDrawSubsystem();
-    private final Rumble rumble = new Rumble(driverController);
-
-    private final Vision vision = new Vision();
-    private final ShuffleBoardHelper shuffleBoardHelper;
 
     private final AutoAimCommand autoAimCommand =
             new AutoAimCommand(
@@ -46,42 +51,18 @@ public class RobotContainer {
                     vision,
                     this,
                     () -> -driverController.getY(GenericHID.Hand.kLeft));
-
-    private final StartEndCommand elevatorDownCommand =
-            new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorVelo(-0.25),
-                    () -> elevatorSubsystem.setElevatorVelo(0),
-                    elevatorSubsystem);
-
-    private final StartEndCommand elevatorUpCommand =
-            new StartEndCommand(
-                    () -> elevatorSubsystem.setElevatorVelo(0.25),
-                    () -> elevatorSubsystem.setElevatorVelo(0),
-                    elevatorSubsystem);
-
-    private final StartEndCommand shootCommand =
-            new StartEndCommand(
-                    () -> shooterSubsystem.setShooterVelo(0.25),
-                    () -> shooterSubsystem.setShooterVelo(0),
-                    shooterSubsystem);
-
-    private final StartEndCommand intakeDrawUpCommand =
-            new StartEndCommand(
-                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.25),
-                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.0),
-                    intakeDrawSubsystem);
-
-    private final StartEndCommand intakeDrawDownCommand =
-            new StartEndCommand(
-                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.25),
-                    () -> intakeDrawSubsystem.setIntakeDrawVelo(0.0),
-                    intakeDrawSubsystem);
-
-    private final StartEndCommand intakeWheelsCommand =
-            new StartEndCommand(
-                    () -> intakeWheelsSubsystem.setIntakeWheelsVelo(0.80),
-                    () -> intakeWheelsSubsystem.setIntakeWheelsVelo(0.0),
-                    intakeWheelsSubsystem);
+    private final ElevatorDownCommand elevatorDownCommand =
+            new ElevatorDownCommand(elevatorSubsystem);
+    private final ElevatorUpCommand elevatorUpCommand = new ElevatorUpCommand(elevatorSubsystem);
+    private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
+    private final IntakeDrawUpCommand intakeDrawUpCommand =
+            new IntakeDrawUpCommand(intakeDrawSubsystem);
+    private final IntakeDrawDownCommand intakeDrawDownCommand =
+            new IntakeDrawDownCommand(intakeDrawSubsystem);
+    private final IntakeWheelsInCommand intakeWheelsInCommand =
+            new IntakeWheelsInCommand(intakeWheelsSubsystem);
+    private final IntakeWheelsOutCommand intakeWheelsOutCommand =
+            new IntakeWheelsOutCommand(intakeWheelsSubsystem);
 
     private void calibrate() {
         System.out.println("Gyro is calibrating...");
@@ -118,30 +99,29 @@ public class RobotContainer {
         Button b = new JoystickButton(driverController, XboxConstants.B_BUTTON);
         Button x = new JoystickButton(driverController, XboxConstants.X_BUTTON);
         Button y = new JoystickButton(driverController, XboxConstants.Y_BUTTON);
-        // POVButton povUp = new POVButton(driverController, 0);
-        // POVButton povDown = new POVButton(driverController, 180);
+        POVButton povUp = new POVButton(driverController, 0);
+        POVButton povDown = new POVButton(driverController, 180);
         // POVButton povLeft = new POVButton(driverController, 90);
         // POVButton povRight = new POVButton(driverController, 270);
 
-        // interact with buttons
-        lb.whileHeld(elevatorDownCommand);
-        rb.whileHeld(elevatorUpCommand);
+        // goes up in about 6.5 seconds
+        lb.whileHeld(intakeDrawDownCommand);
+        // goes down in about 2.1 seconds
+        rb.whileHeld(intakeDrawUpCommand);
         a.whenHeld(autoAimCommand);
-        b.whileHeld(intakeWheelsCommand);
-        // TODO see how long it takes to fall down and update values accordingly
-        x.whenPressed(intakeDrawDownCommand.withTimeout(2));
-        y.whenPressed(intakeDrawUpCommand.withTimeout(2));
-        // povUp.whenPressed(command);
-        // povDown.whenPressed(command);
+        b.whileHeld(shootCommand);
+        x.whileHeld(intakeWheelsInCommand);
+        y.whileHeld(intakeWheelsOutCommand);
+        povUp.whileHeld(elevatorUpCommand);
+        povDown.whileHeld(elevatorDownCommand);
     }
 
     /**
-     * Used to pass the autonomous {@link Command} to the main {@link Robot} class.
+     * The autonomous {@link Command}.
      *
      * @return the {@link Command} or CommandGroup to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // drive back with 3 meter or 4 meter, aim, shoot
         return new SequentialCommandGroup(
                 shuffleBoardHelper.getSelectedCommand(),
                 autoAimCommand.withTimeout(2),
@@ -165,9 +145,5 @@ public class RobotContainer {
      */
     public XboxController getDriverController() {
         return driverController;
-    }
-
-    public Rumble getRumble() {
-        return rumble;
     }
 }

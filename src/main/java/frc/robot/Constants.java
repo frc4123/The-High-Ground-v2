@@ -142,10 +142,10 @@ public final class Constants {
         // see if we can just pull this from Network tables
         public static final String CAMERA_NAME = "Microsoft_LifeCam_HD-3000";
         // !CHARACTERIZE THE ROBOT FOR THESE VALUES
-        public static final double KP = 0.01;
+        public static final double KP = 0.009;
         public static final double KI = 0.0;
         public static final double KD = 0.01;
-        public static final double FFW = 0.25;
+        public static final double FFW = 0.29;
         // public static final double KA = 0;
         // public static final double KV = 0;
         // public static final double KS = 0;
@@ -154,7 +154,6 @@ public final class Constants {
         public static final double TOLERANCE = 0.1;
 
         // TODO get these values
-        private static final double CENTER_OF_TARGET = 8.375;
         public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(21.375);
         // 73.25
         // 53

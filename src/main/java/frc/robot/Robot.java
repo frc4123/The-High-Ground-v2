@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
                                     AutoAimConstants.CAMERA_PITCH_RADIANS,
                                     Math.toRadians(Robot.getResult().getBestTarget().getPitch())));
             // boolean update
-            if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE + 1.0) {
+            if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE) {
                 robotContainer
                         .getShuffleBoardHelper()
                         .getIsCameraCentredWidget()
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
                     .setBoolean(false);
         }
 
-        robotContainer.getRumble().periodic();
+        robotContainer.rumble.periodic();
     }
 
     @Override

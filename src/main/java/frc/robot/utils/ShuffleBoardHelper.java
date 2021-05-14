@@ -19,14 +19,14 @@ public class ShuffleBoardHelper {
     private final ThreeMeterAuto threeMeterAuto;
     private final FourMeterAuto fourMeterAuto;
     private final ShuffleboardTab driverTab;
-    private final SimpleWidget isCameraCentredWidget;
-    private PowerDistributionPanel pdp = new PowerDistributionPanel();
-    private final ComplexWidget pdpWidget;
-    private final ComplexWidget cameraStreamWidget;
-    private final SimpleWidget distanceToTargetWidget;
+    private SimpleWidget isCameraCentredWidget;
+    private PowerDistributionPanel pdp;
+    private ComplexWidget pdpWidget;
+    private ComplexWidget cameraStreamWidget;
+    private SimpleWidget distanceToTargetWidget;
 
     //     @SuppressWarnings("unused")
-    private final HttpCamera cameraStream;
+    private HttpCamera cameraStream;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -40,13 +40,19 @@ public class ShuffleBoardHelper {
 
         fourMeterAuto = new FourMeterAuto(driveSubsystem);
         threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
+        pdp = new PowerDistributionPanel();
+        cameraStream = new HttpCamera("Vision", "http://10.41.23.33:1182/?action=stream");
 
+        setupLayout();
+    }
+
+    public void setupLayout() {
         driverTab.add("Select program for auto", chooser).withPosition(0, 0).withSize(2, 1);
         chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
 
-        cameraStream = new HttpCamera("Vision", "http://10.41.23.33:1182/?action=stream");
         CameraServer.getInstance().addCamera(cameraStream);
+
         isCameraCentredWidget =
                 driverTab
                         .add("Is target centered?", false)
@@ -54,33 +60,29 @@ public class ShuffleBoardHelper {
                         .withPosition(0, 1)
                         .withSize(2, 2);
         // this (should) get the processed footage from photon vision
-        // cameraStreamWidget =
-        //         driverTab
-        //                 .add(cameraStream)
-        //                 .withWidget(BuiltInWidgets.kCameraStream)
-        //                 .withPosition(2, 0)
-        //                 .withSize(5, 4)
-        //                 .withProperties(Map.of("Show controls", false));
-        // this gets the unprocessed camera footage.
         cameraStreamWidget =
                 driverTab
                         .add(cameraStream)
+                        .withWidget(BuiltInWidgets.kCameraStream)
                         .withPosition(2, 0)
                         .withSize(5, 4)
                         .withProperties(Map.of("Show controls", false));
+        // this gets the unprocessed camera footage.
+        // cameraStreamWidget =
+        //         driverTab
+        //                 .add(cameraStream)
+        //                 .withPosition(2, 0)
+        //                 .withSize(5, 4)
+        //                 .withProperties(Map.of("Show controls", false));
+        // still doesnt work
         pdpWidget =
                 driverTab
                         .add("PDP", pdp)
                         .withWidget(BuiltInWidgets.kPowerDistributionPanel)
                         .withPosition(0, 7)
                         .withSize(3, 2);
-        // needs to be done in periodic
         distanceToTargetWidget =
-                driverTab
-                        .add("Distance to target", 0)
-                        .withWidget(BuiltInWidgets.kNumberBar)
-                        .withPosition(7, 2)
-                        .withSize(2, 1);
+                driverTab.add("Distance to target", 0).withPosition(7, 2).withSize(2, 1);
     }
 
     /**

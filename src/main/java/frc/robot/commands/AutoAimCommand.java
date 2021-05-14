@@ -12,6 +12,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.utils.Vision;
 
+import org.photonvision.PhotonPipelineResult;
+
 import java.util.function.DoubleSupplier;
 
 public class AutoAimCommand extends CommandBase {
@@ -19,6 +21,7 @@ public class AutoAimCommand extends CommandBase {
     private final DriveSubsystem driveSubsystem;
     private final RobotContainer robotContainer;
     private final Vision vision;
+    private PhotonPipelineResult result;
     private DoubleSupplier forward;
     private double rotationSpeed;
 
@@ -51,10 +54,12 @@ public class AutoAimCommand extends CommandBase {
 
     @Override
     public void execute() {
-        var result = vision.camera.getLatestResult();
+        result = vision.camera.getLatestResult();
 
         if (result.hasTargets()
                 && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
+            // this works
+            // robotContainer.rumble.startRumble(0.5);
             rotationSpeed =
                     -controller.calculate(result.getBestTarget().getYaw(), 0)
                             + (Math.copySign(1, result.getBestTarget().getYaw())
@@ -66,9 +71,20 @@ public class AutoAimCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() {
+    public void end(boolean interrupted) {
+        // always reaches end, only fully goes through "proper" flow in exception listed on trello
+        System.out.println("End");
         if (controller.atSetpoint()) {
-            robotContainer.getRumble().startRumble(0.5);
+            System.out.println("End setpoint");
+            robotContainer.rumble.startRumble(0.5);
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        // TODO is there somewhere else making this command stop?
+        if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE) {
+            System.out.println("finished setpoint");
             return true;
         } else {
             return false;
