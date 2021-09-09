@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import java.util.Map;
 
 public class ShuffleBoardHelper {
+
     private final ThreeMeterAuto threeMeterAuto;
     private final FourMeterAuto fourMeterAuto;
     private final ShuffleboardTab driverTab;
@@ -24,11 +25,8 @@ public class ShuffleBoardHelper {
     private ComplexWidget pdpWidget;
     private ComplexWidget cameraStreamWidget;
     private SimpleWidget distanceToTargetWidget;
-
-    //     @SuppressWarnings("unused")
+    private SendableChooser<Command> chooser;
     private HttpCamera cameraStream;
-
-    private SendableChooser<Command> chooser = new SendableChooser<>();
 
     /**
      * Used to create all {@link Shuffleboard} widgets for the robot.
@@ -42,11 +40,12 @@ public class ShuffleBoardHelper {
         threeMeterAuto = new ThreeMeterAuto(driveSubsystem);
         pdp = new PowerDistributionPanel();
         cameraStream = new HttpCamera("Vision", "http://10.41.23.33:1182/?action=stream");
+        chooser = new SendableChooser<>();
 
         setupLayout();
     }
 
-    public void setupLayout() {
+    private void setupLayout() {
         driverTab.add("Select program for auto", chooser).withPosition(0, 0).withSize(2, 1);
         chooser.setDefaultOption("3 meter", threeMeterAuto.getCommand());
         chooser.addOption("4 meter", fourMeterAuto.getCommand());
