@@ -23,7 +23,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     /**
-     * Sets the elevator velocity. Value is clamped between -1.0 and 1.0.
+     * Sets the elevator velocity. Value is clamped between -100% and +100%
      *
      * @param velo the velocity to set the motor to.
      */

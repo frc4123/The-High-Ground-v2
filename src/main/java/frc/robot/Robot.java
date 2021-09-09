@@ -31,50 +31,33 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
+        // This routine updates a boolean box based on if the robot is lined up with the
+        // target
         result = vision.camera.getLatestResult();
 
         if (result.hasTargets()) {
             // distance update
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getDistanceToTargetWidget()
-                    .getEntry()
-                    .setDouble(
-                            PhotonUtils.calculateDistanceToTargetMeters(
-                                    AutoAimConstants.CAMERA_HEIGHT_METERS,
-                                    AutoAimConstants.TARGET_HEIGHT_METERS,
-                                    AutoAimConstants.CAMERA_PITCH_RADIANS,
-                                    Math.toRadians(Robot.getResult().getBestTarget().getPitch())));
+            robotContainer.getShuffleBoardHelper().getDistanceToTargetWidget().getEntry()
+                    .setDouble(PhotonUtils.calculateDistanceToTargetMeters(AutoAimConstants.CAMERA_HEIGHT_METERS,
+                            AutoAimConstants.TARGET_HEIGHT_METERS, AutoAimConstants.CAMERA_PITCH_RADIANS,
+                            Math.toRadians(Robot.getResult().getBestTarget().getPitch())));
             // boolean update
             if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE) {
-                robotContainer
-                        .getShuffleBoardHelper()
-                        .getIsCameraCentredWidget()
-                        .getEntry()
-                        .setBoolean(true);
+                robotContainer.getShuffleBoardHelper().getIsCameraCentredWidget().getEntry().setBoolean(true);
             } else {
-                robotContainer
-                        .getShuffleBoardHelper()
-                        .getIsCameraCentredWidget()
-                        .getEntry()
-                        .setBoolean(false);
+                robotContainer.getShuffleBoardHelper().getIsCameraCentredWidget().getEntry().setBoolean(false);
             }
         } else {
-            robotContainer
-                    .getShuffleBoardHelper()
-                    .getIsCameraCentredWidget()
-                    .getEntry()
-                    .setBoolean(false);
+            robotContainer.getShuffleBoardHelper().getIsCameraCentredWidget().getEntry().setBoolean(false);
         }
 
+        // Rumble still doesn't work
         robotContainer.rumble.periodic();
     }
 
-    @Override
-    public void disabledInit() {}
-
-    @Override
-    public void disabledPeriodic() {}
+    public static PhotonPipelineResult getResult() {
+        return result;
+    }
 
     @Override
     public void autonomousInit() {
@@ -85,13 +68,6 @@ public class Robot extends TimedRobot {
         }
     }
 
-    public static PhotonPipelineResult getResult() {
-        return result;
-    }
-
-    @Override
-    public void autonomousPeriodic() {}
-
     @Override
     public void teleopInit() {
         if (autonomousCommand != null) {
@@ -100,13 +76,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
-
-    @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
     }
 
-    @Override
-    public void testPeriodic() {}
 }

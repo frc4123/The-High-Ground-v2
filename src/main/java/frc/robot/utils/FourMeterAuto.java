@@ -18,22 +18,21 @@ public class FourMeterAuto {
 
     /**
      * Auto profile that drives 4 meters backwards.
+     * 
      * @param driveSubsystem the driveSubsystem
      */
     public FourMeterAuto(DriveSubsystem driveSubsystem) {
         path = driveSubsystem.pathList.get(1);
 
-        command =
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                                () -> driveSubsystem.resetPose(path.getInitialPose()),
-                                driveSubsystem),
-                        driveSubsystem.ramseteCommand(path),
-                        new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
+        command = new SequentialCommandGroup(
+                new InstantCommand(() -> driveSubsystem.resetPose(path.getInitialPose()), driveSubsystem),
+                driveSubsystem.ramseteCommand(path),
+                new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
     }
 
     /**
      * Returns this Command
+     * 
      * @return this Command
      */
     public Command getCommand() {

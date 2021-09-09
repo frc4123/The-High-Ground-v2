@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Rumble {
     // Thanks to Banks for this code
-    // TODO Only works if you are starting aligned at the target after a deploy and dont lose track
+    // TODO Only works if you are starting aligned at the target after a deploy and
+    // dont lose track
     // If you rotate off and rotate back in, stops working
 
     private final GenericHID controller;
@@ -20,7 +21,8 @@ public class Rumble {
     /**
      * Starts the rumble with the specified power and duration.
      *
-     * @param power the power to rumble the controller at. Values are from -1 to 1
+     * @param power      the power to rumble the controller at. Values are from -1
+     *                   to 1
      * @param durationMs the duration to rumble the controller for, in milliseconds
      */
     public void startRumble(double power, int durationMs) {
@@ -31,7 +33,8 @@ public class Rumble {
     }
 
     /**
-     * Starts the rumble with the specified power and a default time-out of 500 milliseconds.
+     * Starts the rumble with the specified power and a default time-out of 500
+     * milliseconds.
      *
      * @param power the power to rumble the controller at. Values are from -1 to 1
      */

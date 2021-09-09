@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -26,22 +25,20 @@ public class AutoAimCommand extends CommandBase {
     private double rotationSpeed;
 
     // !characterize the robot for these values
-    private final PIDController controller =
-            new PIDController(AutoAimConstants.KP, AutoAimConstants.KI, AutoAimConstants.KD);
+    private final PIDController controller = new PIDController(AutoAimConstants.KP, AutoAimConstants.KI,
+            AutoAimConstants.KD);
 
     /**
-     * Rotates the robot to the a target if there is one. This command only rotates; you are free to
-     * translate the robot.
+     * Rotates the robot to the a target if there is one. This command only rotates;
+     * you are free to translate the robot.
      *
      * @param driveSubsystem a driveSubsystem instance
-     * @param vision a vision instance
+     * @param vision         a vision instance
      * @param robotContainer a robotContainer instance
-     * @param forward the {@code DoubleSupplier} from the driver controller's translation component.
+     * @param forward        the {@code DoubleSupplier} from the driver controller's
+     *                       translation component.
      */
-    public AutoAimCommand(
-            DriveSubsystem driveSubsystem,
-            Vision vision,
-            RobotContainer robotContainer,
+    public AutoAimCommand(DriveSubsystem driveSubsystem, Vision vision, RobotContainer robotContainer,
             DoubleSupplier forward) {
         this.driveSubsystem = driveSubsystem;
         this.forward = forward;
@@ -56,14 +53,11 @@ public class AutoAimCommand extends CommandBase {
     public void execute() {
         result = vision.camera.getLatestResult();
 
-        if (result.hasTargets()
-                && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
+        if (result.hasTargets() && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
             // this works
             // robotContainer.rumble.startRumble(0.5);
-            rotationSpeed =
-                    -controller.calculate(result.getBestTarget().getYaw(), 0)
-                            + (Math.copySign(1, result.getBestTarget().getYaw())
-                                    * AutoAimConstants.FFW);
+            rotationSpeed = -controller.calculate(result.getBestTarget().getYaw(), 0)
+                    + (Math.copySign(1, result.getBestTarget().getYaw()) * AutoAimConstants.FFW);
         } else {
             rotationSpeed = 0;
         }
@@ -72,7 +66,8 @@ public class AutoAimCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        // always reaches end, only fully goes through "proper" flow in exception listed on trello
+        // always reaches end, only fully goes through "proper" flow in exception listed
+        // on trello
         System.out.println("End");
         if (controller.atSetpoint()) {
             System.out.println("End setpoint");

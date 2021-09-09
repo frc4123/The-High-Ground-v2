@@ -20,6 +20,7 @@ public final class Constants {
         public static final int USB_PORT_2 = 2;
         public static final int USB_PORT_3 = 3;
     }
+
     /** Xbox buttons to their corresponding integer value. */
     public static final class XboxConstants {
 
@@ -54,9 +55,10 @@ public final class Constants {
         public static int POV_DOWN = 180;
         public static int POV_LEFT = 270;
     }
+
     /**
-     * PS4 buttons and their corresponding integer value. Note: you must use DS4Windows in order to
-     * use a PS4 controller on a computer
+     * PS4 buttons and their corresponding integer value. Note: you must use
+     * DS4Windows in order to use a PS4 controller on a computer
      */
     public static final class PS4Constants {
 
@@ -66,7 +68,7 @@ public final class Constants {
         public static int TRIANGLE_BUTTON = 4;
     }
 
-    /** Logitech buttons to their corresponding integer value */
+    /** Logitech buttons and their corresponding integer value */
     public static final class LogitechConstants {
 
         public static final int ONE_BUTTON = 1;
@@ -85,14 +87,16 @@ public final class Constants {
         public static final int MAG_ENCODER_CPR = 4096;
         public static final int TALONFX_ENCODER_CPR = 2048;
         // !remove from calculations if not using an integrated encoder
-        public static final double GEAR_RATIO =
-                11.25; // 12:50 => 20:54 on a falconfx gives 14.8 fps. Driven/Driver
+        public static final double GEAR_RATIO = 11.25; // 12:50 => 20:54 on a falconfx gives 14.8 fps. Driven/Driver
         public static final double WHEEL_DIAMETER_METERS = 0.15875;
         public static final double WHEEL_CIRCUMFERENCE_METERS = Math.PI * WHEEL_DIAMETER_METERS;
         public static final int TIMEOUT = 50;
     }
 
-    /** Mapping between physical CAN devices and their corresponding ID in the CAN chain */
+    /**
+     * Mapping between physical CAN devices and their corresponding ID in the CAN
+     * chain
+     */
     public static final class CanIdConstants {
 
         // Note: PDP is always 0
@@ -110,7 +114,10 @@ public final class Constants {
         public static final int INDEX_MOTOR_ID = 12;
     }
 
-    /** Values relating to path finding and trajectory following. See {@see FourMeterAuto} */
+    /**
+     * Values relating to path finding and trajectory following. See
+     * {@see FourMeterAuto}
+     */
     public static final class TrajectoryConstants {
 
         public static final double KS = 1.2;
@@ -128,15 +135,17 @@ public final class Constants {
         public static final double STARTING_POSE_Y = 0;
         public static final boolean IS_GYRO_REVERSED_FOR_PATHWEAVER = true;
 
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
-                new DifferentialDriveKinematics(DriveConstants.TRACK_WIDTH_METERS);
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
+                DriveConstants.TRACK_WIDTH_METERS);
 
-        public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEED_FOrWARD =
-                new SimpleMotorFeedforward(
-                        TrajectoryConstants.KS, TrajectoryConstants.KV, TrajectoryConstants.KA);
+        public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEED_FOrWARD = new SimpleMotorFeedforward(
+                TrajectoryConstants.KS, TrajectoryConstants.KV, TrajectoryConstants.KA);
     }
 
-    /** Values relating to the auto-aim feature of the robot. See {@see AutoAimCommand}. */
+    /**
+     * Values relating to the auto-aim feature of the robot. See
+     * {@see AutoAimCommand}.
+     */
     public static final class AutoAimConstants {
         // !MAKE SURE THIS IS RIGHT
         // see if we can just pull this from Network tables

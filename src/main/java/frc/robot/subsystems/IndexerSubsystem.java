@@ -9,24 +9,22 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CanIdConstants;
+import frc.robot.Constants;
 
-public class IntakeWheelsSubsystem extends SubsystemBase {
+public class IndexerSubsystem extends SubsystemBase {
+    TalonSRX motor = new TalonSRX(Constants.CanIdConstants.INDEX_MOTOR_ID);
 
-    private final TalonSRX motor = new TalonSRX(CanIdConstants.INTAKE_WHEELS_ID);
-
-    /** Creates a new IntakeWheels. */
-    public IntakeWheelsSubsystem() {
-        motor.configOpenloopRamp(1);
+    /** Creates a new IndexerSubsystem. */
+    public IndexerSubsystem() {
         motor.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
-     * Sets the velocity of the ball intake motor.
+     * Sets the velocity of the indexer motor.
      * 
-     * @param velo sets the velocity of the ball intake motor
+     * @param velo the velocity to set the indexer motor
      */
-    public void setIntakeWheelsVelo(double velo) {
+    public void setIndexVelo(double velo) {
         motor.set(ControlMode.PercentOutput, velo);
     }
 }

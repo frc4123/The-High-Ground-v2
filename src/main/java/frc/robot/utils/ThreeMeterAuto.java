@@ -18,22 +18,21 @@ public class ThreeMeterAuto {
 
     /**
      * Auto profile that drives 3 meters backwards.
+     * 
      * @param driveSubsystem the driveSubsystem
      */
     public ThreeMeterAuto(DriveSubsystem driveSubsystem) {
         path = driveSubsystem.pathList.get(0);
 
-        command =
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                                () -> driveSubsystem.resetPose(path.getInitialPose()),
-                                driveSubsystem),
-                        driveSubsystem.ramseteCommand(path),
-                        new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
+        command = new SequentialCommandGroup(
+                new InstantCommand(() -> driveSubsystem.resetPose(path.getInitialPose()), driveSubsystem),
+                driveSubsystem.ramseteCommand(path),
+                new InstantCommand(() -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem));
     }
 
-     /**
+    /**
      * Returns this Command
+     * 
      * @return this Command
      */
     public Command getCommand() {

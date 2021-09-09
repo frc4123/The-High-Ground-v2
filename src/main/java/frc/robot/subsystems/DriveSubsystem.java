@@ -32,10 +32,14 @@ import java.util.List;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    // private final WPI_TalonFX leftMaster = new WPI_TalonFX(CanIdConstants.LEFT_MASTER_ID);
-    // private final WPI_TalonFX rightMaster = new WPI_TalonFX(CanIdConstants.RIGHT_MASTER_ID);
-    // private final WPI_TalonFX leftSlave = new WPI_TalonFX(CanIdConstants.LEFT_SLAVE_ID);
-    // private final WPI_TalonFX rightSlave = new WPI_TalonFX(CanIdConstants.RIGHT_SLAVE_ID);
+    // private final WPI_TalonFX leftMaster = new
+    // WPI_TalonFX(CanIdConstants.LEFT_MASTER_ID);
+    // private final WPI_TalonFX rightMaster = new
+    // WPI_TalonFX(CanIdConstants.RIGHT_MASTER_ID);
+    // private final WPI_TalonFX leftSlave = new
+    // WPI_TalonFX(CanIdConstants.LEFT_SLAVE_ID);
+    // private final WPI_TalonFX rightSlave = new
+    // WPI_TalonFX(CanIdConstants.RIGHT_SLAVE_ID);
 
     private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(CanIdConstants.LEFT_MASTER_ID);
     private final WPI_TalonSRX rightMaster = new WPI_TalonSRX(CanIdConstants.RIGHT_MASTER_ID);
@@ -44,37 +48,30 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
-    private final DifferentialDrive differentialDrive =
-            new DifferentialDrive(leftMaster, rightMaster);
+    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
 
     // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-characterization/introduction.html
-    private final DifferentialDriveOdometry odometry =
-            new DifferentialDriveOdometry(gyro.getRotation2d());
+    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
-    private final DifferentialDriveVoltageConstraint autoVoltageConstraint =
-            new DifferentialDriveVoltageConstraint(
-                    TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD,
-                    TrajectoryConstants.DRIVE_KINEMATICS,
-                    10);
+    private final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+            TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD, TrajectoryConstants.DRIVE_KINEMATICS, 10);
 
     private final PIDController ramseteController = new PIDController(TrajectoryConstants.KP, 0, 0);
 
     /**
-     * Configuration for a {@code Trajectory}. See {@see TrajectoryConstraint} for a list of
-     * contraint decorators.
+     * Configuration for a {@code Trajectory}. See {@see TrajectoryConstraint} for a
+     * list of constraint decorators.
      */
-    private final TrajectoryConfig config =
-            new TrajectoryConfig(
-                            TrajectoryConstants.MAX_VELOCITY, TrajectoryConstants.MAX_ACCELERATION)
-                    .setKinematics(TrajectoryConstants.DRIVE_KINEMATICS)
+    private final TrajectoryConfig config = new TrajectoryConfig(TrajectoryConstants.MAX_VELOCITY,
+            TrajectoryConstants.MAX_ACCELERATION).setKinematics(TrajectoryConstants.DRIVE_KINEMATICS)
                     .addConstraint(autoVoltageConstraint);
 
-    /** List of {@code Trajectorys} */
+    /** List of {@code Trajectories} */
     public final List<Trajectory> pathList;
 
     // talonfx
     // private final SupplyCurrentLimitConfiguration currentLimit =
-    //     new SupplyCurrentLimitConfiguration(true, 40, 60, 1);
+    // new SupplyCurrentLimitConfiguration(true, 40, 60, 1);
 
     public DriveSubsystem() {
         // talonfx
@@ -84,9 +81,9 @@ public class DriveSubsystem extends SubsystemBase {
         // rightSlave.configSupplyCurrentLimit(currentLimit);
 
         // leftMaster.configSelectedFeedbackSensor(
-        //     TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
+        // TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
         // rightMaster.configSelectedFeedbackSensor(
-        //     TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
+        // TalonFXFeedbackDevice.IntegratedSensor, 0, DriveConstants.TIMEOUT);
 
         // talonsrx + victorspx
         leftMaster.configContinuousCurrentLimit(10, 0);
@@ -99,10 +96,10 @@ public class DriveSubsystem extends SubsystemBase {
         rightMaster.configPeakCurrentDuration(500, 0);
         rightMaster.enableCurrentLimit(true);
 
-        leftMaster.configSelectedFeedbackSensor(
-                TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
-        rightMaster.configSelectedFeedbackSensor(
-                TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, DriveConstants.TIMEOUT);
+        leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0,
+                DriveConstants.TIMEOUT);
+        rightMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0,
+                DriveConstants.TIMEOUT);
 
         // both
         leftMaster.setNeutralMode(NeutralMode.Brake);
@@ -113,28 +110,22 @@ public class DriveSubsystem extends SubsystemBase {
         rightSlave.follow(rightMaster);
         leftSlave.follow(leftMaster);
 
-        pathList =
-                List.of(
-                        TrajectoryGenerator.generateTrajectory(
-                                new Pose2d(0, 0, new Rotation2d(0)),
-                                List.of(new Translation2d(1, 0)),
-                                new Pose2d(3, 0, new Rotation2d(0)),
-                                config),
-                        TrajectoryGenerator.generateTrajectory(
-                                new Pose2d(0, 0, new Rotation2d(0)),
-                                List.of(new Translation2d(2, 0)),
-                                new Pose2d(4, 0, new Rotation2d(0)),
-                                config));
+        pathList = List.of(
+                TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+                        List.of(new Translation2d(1, 0)), new Pose2d(3, 0, new Rotation2d(0)), config),
+                TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+                        List.of(new Translation2d(2, 0)), new Pose2d(4, 0, new Rotation2d(0)), config));
 
         resetEncoders();
         // configopenloopramp() ?
     }
 
     /**
-     * Arcade style drive. Values are squared to decrease sensitivity at low values. Please use the
-     * left stick for translation and the right stick for rotation.
+     * Arcade style drive. Values are squared to decrease sensitivity at low values.
+     * Please use the left stick for translation and the right stick for rotation.
      *
-     * <p>See {@link DifferentialDrive#curvatureDrive()} for another good drive system.
+     * <p>
+     * See {@link DifferentialDrive#curvatureDrive()} for another good drive system.
      *
      * @param fwd the translation component
      * @param rot the rotation component
@@ -146,7 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
     /**
      * Tank drive. Typically used for trajectory following.
      *
-     * @param leftVolts the voltage to supply to the left side of the drive train
+     * @param leftVolts  the voltage to supply to the left side of the drive train
      * @param rightVolts the voltage to supply to the right side of the drive train
      */
     public void voltDrive(double leftVolts, double rightVolts) {
@@ -155,6 +146,7 @@ public class DriveSubsystem extends SubsystemBase {
         rightMaster.setVoltage(-rightVolts);
         differentialDrive.feed();
     }
+
     /**
      * Returns the {@code DifferentialDrive} object.
      *
@@ -165,18 +157,20 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // public double getGyroAngle() {
-    //     return gyro.getAngle();
+    // return gyro.getAngle();
     // }
-    // Sometimes a gyro overrides getRotation and returns gyro as clockwise negative (which is
+    // Sometimes a gyro overrides getRotation and returns gyro as clockwise negative
+    // (which is
     // proper)
     // but their getAngle() returns clockwise positive. This means that
-    // gyro.getRotation2d().getDegrees will return clockwise negative, but getAngle() would return
+    // gyro.getRotation2d().getDegrees will return clockwise negative, but
+    // getAngle() would return
     // clockwise positive
     // but I'm not sure of a gyro that does this
 
     /**
-     * Returns rotaion in degrees. Returns the rotation of the gyro in degrees, with CCW rotation
-     * being positive.
+     * Returns the rotation of the gyro in degrees, with CCW rotation being
+     * positive.
      *
      * @return the heading of the gyro
      */
@@ -202,7 +196,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Resets the specified pose. Resets the drive train encoders and the {@link Pose2d} instance.
+     * Resets the specified pose. Resets the drive train encoders and the
+     * {@link Pose2d} instance.
      *
      * @param pose the Pose2d instance to reset
      */
@@ -221,56 +216,50 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Returns the position, in meters, of the left side of the wheelbase. Position accumulates
-     * stating from when the robot is turned on.
+     * Returns the position, in meters, of the left side of the wheelbase. Position
+     * accumulates stating from when the robot is turned on.
      *
      * @return the current position, in meters, of the left side of the wheelbase
      */
     private double getLeftWheelPosition() {
         // TODO remove gear ratio when using talonsrxs
-        return ((leftMaster.getSelectedSensorPosition()
-                        * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
-                        / DriveConstants.TALONFX_ENCODER_CPR)
-                / DriveConstants.GEAR_RATIO);
+        return ((leftMaster.getSelectedSensorPosition() * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
+                / DriveConstants.TALONFX_ENCODER_CPR) / DriveConstants.GEAR_RATIO);
     }
 
     /**
-     * Returns the position, in meters, of the right side of the wheelbase. Position accumulates
-     * stating from when the robot is turned on.
+     * Returns the position, in meters, of the right side of the wheelbase. Position
+     * accumulates stating from when the robot is turned on.
      *
      * @return the current position, in meters, of the right side of the wheelbase
      */
     private double getRightWheelPosition() {
-        return ((leftMaster.getSelectedSensorPosition()
-                        * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
-                        / DriveConstants.TALONFX_ENCODER_CPR)
-                / DriveConstants.GEAR_RATIO);
+        return ((leftMaster.getSelectedSensorPosition() * DriveConstants.WHEEL_CIRCUMFERENCE_METERS
+                / DriveConstants.TALONFX_ENCODER_CPR) / DriveConstants.GEAR_RATIO);
     }
 
     /**
-     * Returns the current velocity, in meters per second, of the left side of the wheelbase.
+     * Returns the current velocity, in meters per second, of the left side of the
+     * wheelbase.
      *
-     * @return the current velocity, in meters per second, of the left side of the wheelbase
+     * @return the current velocity, in meters per second, of the left side of the
+     *         wheelbase
      */
     private double getLeftWheelSpeed() {
-        return (leftMaster.getSelectedSensorVelocity(0)
-                * 10
-                / DriveConstants.TALONFX_ENCODER_CPR
-                / DriveConstants.GEAR_RATIO
-                * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
+        return (leftMaster.getSelectedSensorVelocity(0) * 10 / DriveConstants.TALONFX_ENCODER_CPR
+                / DriveConstants.GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
     }
 
     /**
-     * Returns the current velocity, in meters per second, of the right side of the wheelbase.
+     * Returns the current velocity, in meters per second, of the right side of the
+     * wheelbase.
      *
-     * @return the current velocity, in meters per second, of the right side of the wheelbase
+     * @return the current velocity, in meters per second, of the right side of the
+     *         wheelbase
      */
     private double getRightWheelSpeed() {
-        return (leftMaster.getSelectedSensorVelocity(0)
-                * 10
-                / DriveConstants.TALONFX_ENCODER_CPR
-                / DriveConstants.GEAR_RATIO
-                * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
+        return (leftMaster.getSelectedSensorVelocity(0) * 10 / DriveConstants.TALONFX_ENCODER_CPR
+                / DriveConstants.GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE_METERS);
     }
 
     /**
@@ -281,24 +270,18 @@ public class DriveSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
+
     /**
-     * Returns a {@code RamseteCommand} object. Used to follow the speifided {@link Trajectory}.
+     * Returns a {@code RamseteCommand} object. Used to follow the specified
+     * {@link Trajectory}.
      *
      * @param path the {@code Trajectory} to follow
      * @return a {@link RamseteCommand} object
      */
     public RamseteCommand ramseteCommand(Trajectory path) {
-        return new RamseteCommand(
-                path,
-                odometry::getPoseMeters,
-                new RamseteController(),
-                TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD,
-                TrajectoryConstants.DRIVE_KINEMATICS,
-                this::getWheelSpeeds,
-                ramseteController,
-                ramseteController,
-                this::voltDrive,
-                this);
+        return new RamseteCommand(path, odometry::getPoseMeters, new RamseteController(),
+                TrajectoryConstants.SIMPLE_MOTOR_FEED_FOrWARD, TrajectoryConstants.DRIVE_KINEMATICS,
+                this::getWheelSpeeds, ramseteController, ramseteController, this::voltDrive, this);
     }
 
     @Override

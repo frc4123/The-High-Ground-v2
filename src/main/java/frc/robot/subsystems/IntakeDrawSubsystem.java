@@ -22,6 +22,11 @@ public class IntakeDrawSubsystem extends SubsystemBase {
         motor.setNeutralMode(NeutralMode.Brake);
     }
 
+    /**
+     * Sets the velocity of the Intake motor.
+     * 
+     * @param velo the velocity of the intake motor in percent
+     */
     public void setIntakeDrawVelo(double velo) {
         motor.set(ControlMode.PercentOutput, velo);
     }

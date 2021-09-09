@@ -52,40 +52,27 @@ public class ShuffleBoardHelper {
 
         CameraServer.getInstance().addCamera(cameraStream);
 
-        isCameraCentredWidget =
-                driverTab
-                        .add("Is target centered?", false)
-                        .withWidget(BuiltInWidgets.kBooleanBox)
-                        .withPosition(0, 1)
-                        .withSize(2, 2);
+        isCameraCentredWidget = driverTab.add("Is target centered?", false).withWidget(BuiltInWidgets.kBooleanBox)
+                .withPosition(0, 1).withSize(2, 2);
         // this (should) get the processed footage from photon vision
-        cameraStreamWidget =
-                driverTab
-                        .add(cameraStream)
-                        .withWidget(BuiltInWidgets.kCameraStream)
-                        .withPosition(2, 0)
-                        .withSize(5, 4)
-                        .withProperties(Map.of("Show controls", false));
+        cameraStreamWidget = driverTab.add(cameraStream).withWidget(BuiltInWidgets.kCameraStream).withPosition(2, 0)
+                .withSize(5, 4).withProperties(Map.of("Show controls", false));
         // this gets the unprocessed camera footage.
         // cameraStreamWidget =
-        //         driverTab
-        //                 .add(cameraStream)
-        //                 .withPosition(2, 0)
-        //                 .withSize(5, 4)
-        //                 .withProperties(Map.of("Show controls", false));
+        // driverTab
+        // .add(cameraStream)
+        // .withPosition(2, 0)
+        // .withSize(5, 4)
+        // .withProperties(Map.of("Show controls", false));
         // still doesnt work
-        pdpWidget =
-                driverTab
-                        .add("PDP", pdp)
-                        .withWidget(BuiltInWidgets.kPowerDistributionPanel)
-                        .withPosition(0, 7)
-                        .withSize(3, 2);
-        distanceToTargetWidget =
-                driverTab.add("Distance to target", 0).withPosition(7, 2).withSize(2, 1);
+        pdpWidget = driverTab.add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel).withPosition(0, 7)
+                .withSize(3, 2);
+        distanceToTargetWidget = driverTab.add("Distance to target", 0).withPosition(7, 2).withSize(2, 1);
     }
 
     /**
-     * Returns the selected {@code Command} in the {@link SendableChooser} box on Shuffleboard.
+     * Returns the selected {@code Command} in the {@link SendableChooser} box on
+     * Shuffleboard.
      *
      * @return the selected autonomous command
      */
@@ -94,8 +81,8 @@ public class ShuffleBoardHelper {
     }
 
     /**
-     * Returns this {@link #isCameraCentredWidget}. This is a boolean box that shows whether the
-     * front camera is centered on a target.
+     * Returns this {@link #isCameraCentredWidget}. This is a boolean box that shows
+     * whether the front camera is centered on a target.
      *
      * @return this {@link #isCameraCentredWidget}
      */
@@ -104,8 +91,8 @@ public class ShuffleBoardHelper {
     }
 
     /**
-     * Returns this {@link #cameraStreamWidget}. This will either be a processed {@link HttpCamera}
-     * stream or an unprocessed {@link UsbCamera} stream.
+     * Returns this {@link #cameraStreamWidget}. This will either be a processed
+     * {@link HttpCamera} stream or an unprocessed {@link UsbCamera} stream.
      *
      * @return this {@link cameraStreamWidget}
      */
@@ -114,8 +101,8 @@ public class ShuffleBoardHelper {
     }
 
     /**
-     * Returns this {@link #pdpWidget}. This displays the power draw per PDP channel and total
-     * voltage and amperage.
+     * Returns this {@link #pdpWidget}. This displays the power draw per PDP channel
+     * and total voltage and amperage.
      *
      * @return this {@link #pdpWidget}
      */

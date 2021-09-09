@@ -13,20 +13,22 @@ import frc.robot.Constants.CanIdConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     // TODO make this a pid subsystem
+    // TODO plugin and manage the CIMcoders we have
 
     private final TalonSRX motorMaster = new TalonSRX(CanIdConstants.SHOOTER_MASTER_ID);
     private final TalonSRX motorSlave = new TalonSRX(CanIdConstants.SHOOTER_SLAVE_ID);
 
     /** Creates a new ShooterSubsystem. */
     public ShooterSubsystem() {
-        // if motors are on the same side, set to follow, if not, comment out follow, and uncomment
+        // if motors are on the same side, set to follow, if not, comment out follow,
+        // and uncomment
         // shooterSlave.set(ControlMode.PercentOutput, -speed);
         motorSlave.follow(motorMaster);
     }
 
     /**
-     * Sets the shooter velocity. Value is clamped between -1.0 and 1.0.
-     *
+     * Sets the shooter velocity.
+     * 
      * @param velo the velocity to set the motor to.
      */
     public void setShooterVelo(double velo) {
