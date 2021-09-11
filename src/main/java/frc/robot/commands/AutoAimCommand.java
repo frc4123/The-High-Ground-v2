@@ -23,6 +23,7 @@ public class AutoAimCommand extends CommandBase {
     private PhotonPipelineResult result;
     private DoubleSupplier forward;
     private double rotationSpeed;
+    private boolean isCameraWorking;
 
     // !characterize the robot for these values
     private final PIDController controller = new PIDController(AutoAimConstants.KP, AutoAimConstants.KI,
@@ -53,15 +54,22 @@ public class AutoAimCommand extends CommandBase {
     public void execute() {
         result = vision.camera.getLatestResult();
 
-        if (result.hasTargets() && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
-            // this works
-            // robotContainer.rumble.startRumble(0.5);
-            rotationSpeed = -controller.calculate(result.getBestTarget().getYaw(), 0)
-                    + (Math.copySign(1, result.getBestTarget().getYaw()) * AutoAimConstants.FFW);
+        if (result != null) {
+            isCameraWorking = true;
+
+            if (result.hasTargets() && (Math.abs(result.getBestTarget().getYaw()) >= AutoAimConstants.TOLERANCE)) {
+                // this works
+                // robotContainer.rumble.startRumble(0.5);
+                rotationSpeed = -controller.calculate(result.getBestTarget().getYaw(), 0)
+                        + (Math.copySign(1, result.getBestTarget().getYaw()) * AutoAimConstants.FFW);
+            } else {
+                rotationSpeed = 0;
+            }
+            driveSubsystem.arcadeDrive(forward.getAsDouble(), rotationSpeed);
         } else {
-            rotationSpeed = 0;
+            isCameraWorking = false;
+            System.out.println("The camera could not be found.");
         }
-        driveSubsystem.arcadeDrive(forward.getAsDouble(), rotationSpeed);
     }
 
     @Override
@@ -70,7 +78,7 @@ public class AutoAimCommand extends CommandBase {
         // on trello
         System.out.println("End");
         if (controller.atSetpoint()) {
-            System.out.println("End setpoint");
+            System.out.println("End set-point");
             robotContainer.rumble.startRumble(0.5);
         }
     }
@@ -78,11 +86,13 @@ public class AutoAimCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO is there somewhere else making this command stop?
-        if (Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE) {
-            System.out.println("finished setpoint");
+
+        if (isCameraWorking && Math.abs(result.getBestTarget().getYaw()) <= AutoAimConstants.TOLERANCE) {
+            System.out.println("finished set-point");
             return true;
         } else {
             return false;
         }
+
     }
 }

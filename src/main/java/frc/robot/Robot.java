@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
         // target
         result = vision.camera.getLatestResult();
 
-        if (result.hasTargets()) {
+        if (result != null && result.hasTargets()) {
             // distance update
             robotContainer.getShuffleBoardHelper().getDistanceToTargetWidget().getEntry()
                     .setDouble(PhotonUtils.calculateDistanceToTargetMeters(AutoAimConstants.CAMERA_HEIGHT_METERS,
